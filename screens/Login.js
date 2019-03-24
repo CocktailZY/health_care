@@ -16,9 +16,7 @@ export default class Register extends PureComponent {
     render() {
         return (
             <View style={{flex: 1, backgroundColor: '#eeeeee'}}>
-                <View style={{flex: 1}}>
-                    <Image source={require('../images/login_poster.jpg')} resizeMode={'contain'}/>
-                </View>
+                <Image source={require('../images/login_poster.jpg')} style={{height:240}} />
                 <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
                     <Input
                         placeholder='用户名'
@@ -54,7 +52,10 @@ export default class Register extends PureComponent {
                         onPress={()=>{this.props.navigation.navigate('Home')}}
                     />
                     <View style={{width:width*0.7,alignItems:'flex-end'}}>
-                        <Text style={{color:'#1890ff'}} onPress={()=>{this.props.navigation.navigate('Register')}}>注册新用户</Text>
+                        <View style={{flexDirection: 'row'}}>
+                            <Text style={{color:'#1890ff',marginRight:20}} onPress={()=>{this.props.navigation.navigate('RegisterDoctor')}}>医生注册</Text>
+                            <Text style={{color:'#1890ff'}} onPress={()=>{this.props.navigation.navigate('Register')}}>用户注册</Text>
+                        </View>
                     </View>
                 </View>
             </View>

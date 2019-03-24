@@ -16,10 +16,8 @@ export default class Register extends PureComponent {
     render() {
         return (
             <View style={{flex: 1, backgroundColor: '#eeeeee'}}>
-                <View style={{flex: 1}}>
-                    <Image source={require('../images/login_poster.jpg')} resizeMode={'contain'}/>
-                </View>
-                <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
+                <Image source={require('../images/login_poster.jpg')} style={{height:240}} />
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Input
                         placeholder='用户名/邮箱'
                         leftIcon={
