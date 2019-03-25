@@ -63,8 +63,7 @@ const styles = {
 export default class Home extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-        };
+        this.state = {};
     };
 
     render() {
@@ -135,14 +134,19 @@ export default class Home extends PureComponent {
 
                         </View>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginTop: 20}}>
-                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                <Icons
-                                    name='ios-medkit'
-                                    color='#ffa502'
-                                    size={30}
-                                />
-                                <Text style={{marginTop: 5}}>{'用药提醒'}</Text>
-                            </View>
+                            <TouchableOpacity style={{flex: 1}} onPress={() => {
+                                this.props.navigation.navigate('Medkit')
+                            }}>
+                                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                    <Icons
+                                        name='ios-medkit'
+                                        color='#ffa502'
+                                        size={30}
+                                    />
+                                    <Text style={{marginTop: 5}}>{'用药提醒'}</Text>
+                                </View>
+                            </TouchableOpacity>
+
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
                                 this.props.navigation.navigate('AllDoctor')
                             }}>
@@ -183,8 +187,10 @@ export default class Home extends PureComponent {
                         <View style={{flexDirection: 'row', paddingLeft: 5}}>
                             <View style={{width: 15, borderLeftWidth: 3, borderLeftColor: '#278EEE'}}></View>
                             <Text style={{fontSize: 16}}>{'文章推荐'}</Text>
-                            <View style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}>
-                                <Text onPress={()=>{this.props.navigation.navigate('Topic')}}>{'更多'}</Text>
+                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
+                                <Text onPress={() => {
+                                    this.props.navigation.navigate('Topic')
+                                }}>{'更多'}</Text>
                             </View>
                         </View>
                         <View style={{
@@ -262,8 +268,10 @@ export default class Home extends PureComponent {
                         <View style={{flexDirection: 'row', paddingLeft: 5}}>
                             <View style={{width: 15, borderLeftWidth: 3, borderLeftColor: '#278EEE'}}/>
                             <Text style={{fontSize: 16}}>{'名医推荐'}</Text>
-                            <View style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}>
-                                <Text onPress={()=>{this.props.navigation.navigate('AllDoctor')}}>{'更多'}</Text>
+                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
+                                <Text onPress={() => {
+                                    this.props.navigation.navigate('AllDoctor')
+                                }}>{'更多'}</Text>
                             </View>
                         </View>
                         <View style={{

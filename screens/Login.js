@@ -46,7 +46,7 @@ export default class Register extends PureComponent {
         return (
             <View style={{flex: 1, backgroundColor: '#eeeeee'}}>
                 <Image source={require('../images/login_poster.jpg')} style={{height: 240}}/>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:44}}>
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 44}}>
                     <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                         <Input
                             placeholder='用户名/邮箱'
@@ -79,6 +79,8 @@ export default class Register extends PureComponent {
                                     style={{marginRight: 10}}
                                 />
                             }
+                            keyboardType={'numeric'}
+                            secureTextEntry={true}
                             inputContainerStyle={{borderColor: 'transparent'}}
                             textContentType={'password'}
                             containerStyle={{

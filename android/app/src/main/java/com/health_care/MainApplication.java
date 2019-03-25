@@ -3,6 +3,7 @@ package com.health_care;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.liang.RNAlarmPackage;
 import com.reactnative.googlefit.GoogleFitPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNAlarmPackage(),
             new GoogleFitPackage(BuildConfig.APPLICATION_ID),
             new RNGestureHandlerPackage(),
           new VectorIconsPackage()

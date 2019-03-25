@@ -100,7 +100,7 @@ android {
     defaultConfig {
         applicationId "com.health_care"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         ndk {
@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-alarm')
     compile project(':react-native-google-fit')
     compile project(':react-native-gesture-handler')
     compile project(':react-native-vector-icons')
