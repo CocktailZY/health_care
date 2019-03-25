@@ -16,6 +16,10 @@ import {
 } from 'react-native';
 import {Header, Icon} from 'react-native-elements';
 
+import FetchUtil from '../util/FetchUtil';
+import Config from '../util/Config';
+import  Constant from "../util/Constant";
+
 const {width, height} = Dimensions.get('window');
 
 class Topic extends Component {
@@ -32,11 +36,9 @@ class Topic extends Component {
     };
 
     componentDidMount() {
-        // this.fetchTopic(1);
-        // this._topicAddPage = DeviceEventEmitter.addListener('topicAddPage', (params) => {
-        //     // console.log(params);
-        //     this.fetchTopic(1);
-        // });
+        this.fetchTopic(1,(data) =>{
+            this.topicListCallBack(data);
+        });
     };
 
     componentWillUnmount() {
@@ -44,47 +46,29 @@ class Topic extends Component {
     };
 
     //获取话题列表数据
-    fetchTopic = (pageNum) => {
-        let url = Path.getTopicList;
+    fetchTopic = (pageNum,callback) => {
+        let url = Config.ESSAY+"?token=lhy&userId="+Constant.user.userId;
         let params = {
-            mid: this.state.room.roomJid,
-            jidNode: this.state.basic.jidNode,
             pageNum: pageNum,
-            pageSize: Path.pageSize,
-            uuId: this.state.uuid,
-            ticket: this.state.ticket,
-            userId: this.state.basic.userId,
-            type: 1,
+            pageSize: Constant.pageSize
         };
-        FetchUtil.netUtil(url + ParamsDealUtil.toGetParams(params), {}, 'GET', this.props.navigation, '', this.topicListCallBack);
+        FetchUtil.httpGet(url ,params,callback);
     };
     //获取投票列表数据回调
     topicListCallBack = (res) => {
-        if (res.code.toString() == '200') {
-            let dataArr = [];
-            if (res.data.page.currentPage <= 1) {
-                dataArr = res.data.page.recordList;
-            } else {
-                dataArr = this.state.dataSource.concat(res.data.page.recordList);
-            }
-
-            let topArr = [];
-            let arr = [];
-            dataArr.map((item, index) => {
-                if (item.isTop == '1') {
-                    topArr.push(item);
-                } else {
-                    arr.push(item)
-                }
-            });
-
-            this.setState({
-                dataSource: topArr.concat(arr),
-                pageNum: res.data.page.currentPage,
-                totalPage: res.data.page.totalPage,
-                footLoading: false,//是否可刷新
-            })
+        console.log(res);
+        let dataArr = [];
+        if (res.currentPage <= 1) {
+            dataArr = res.recordList;
+        } else {
+            dataArr = this.state.dataSource.concat(res.recordList);
         }
+        this.setState({
+            dataSource: dataArr,
+            pageNum: res.currentPage,
+            totalPage: res.totalPage,
+            footLoading: false,//是否可刷新
+        })
     };
 
     _renderFooter() {
@@ -133,11 +117,7 @@ class Topic extends Component {
                 style={{backgroundColor: '#FFFFFF'}}
                 onPress={() => {
                     this.props.navigation.navigate('TopicDetail', {
-                        ticket: this.state.ticket,
-                        uuid: this.state.uuid,
-                        room: this.state.room,
-                        basic: this.state.basic,
-                        topicId: item.id//投票id
+                        topicId: item.id//文章详情
                     });
                 }}>
                 <View style={[styles.flex1, {padding: 8}]}>

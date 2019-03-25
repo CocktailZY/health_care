@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
     Text, View, TouchableOpacity, Image, Dimensions, ScrollView
 } from 'react-native';
@@ -60,7 +60,7 @@ const styles = {
         height: 28
     }
 }
-export default class Home extends Component {
+export default class Home extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
