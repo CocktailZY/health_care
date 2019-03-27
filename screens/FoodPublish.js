@@ -19,15 +19,14 @@ import FetchUtil from '../util/FetchUtil';
 import Config from '../util/Config';
 import  Constant from "../util/Constant";
 const inputComponents = [], ACT_HEIGHT = 38;
-class TopicPublish extends Component {
+class FoodPublish extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            essayBody: {
-                title: '',
-                context: '',
-                essayType: ''
+            foodBody: {
+                foodName: '',
+                num: '',
             },
         }
     };
@@ -55,25 +54,23 @@ class TopicPublish extends Component {
         let body = this.state.essayBody;
         body[key] = text;
         this.setState({
-            essayBody: body
+            foodBody: body
         }, () => {
-            console.log(this.state.essayBody)
+            console.log(this.state.foodBody)
         });
     };
 
-    //提交文章
-    submitEssay = (callback) => {
-        let body = this.state.essayBody;
-        if (body.title == '') {
-            Alert.alert('文章标题不得为空');
-        } else if (body.title.length > 32) {
-            Alert.alert('标题长度不得超过32位');
-        } else if (body.context == '') {
+    //提交饮食数据
+    submitFood = (callback) => {
+        let body = this.state.foodBody;
+        if (body.foodName == '') {
+            Alert.alert('名称不得为空');
+        } else if (body.foodName.length > 32) {
+            Alert.alert('名称长度不得超过32位');
+        } else if (body.num == '') {
             Alert.alert('内容不得为空');
-        } else if (body.context.length > 60000) {
-            Alert.alert('内容长度不得超过6万位');
-        } else {
-            let url =Config.ESSAY_SAVE+"?token=ly&userId="+Constant.user.id;
+        }else {
+            let url =Config.FOOD_SAVE+"?token=ly&userId="+Constant.user.id;
             FetchUtil.httpGet(url,body,callback);
         }
     };
@@ -91,7 +88,7 @@ class TopicPublish extends Component {
                             onPress={() => this.props.navigation.goBack()}
                         />
                     }
-                    centerComponent={{text: '文章发表', style: {color: '#fff', fontSize: 18}}}
+                    centerComponent={{text: '添加饮食', style: {color: '#fff', fontSize: 18}}}
                 />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -100,56 +97,39 @@ class TopicPublish extends Component {
                     style={{flex: 1, backgroundColor: 'white', paddingLeft: 15, paddingRight: 15}}>
                     <View style={[styles.voteGroup, {borderTopColor: 'transparent'}]}
                           onStartShouldSetResponderCapture={this._onStartShouldSetResponderCapture.bind(this)}>
-                        <Text style={styles.voteTitle}>文章标题</Text>
+                        <Text style={styles.voteTitle}>名称</Text>
                         <TextInput ref={'voteTitle'}
                                    onLayout={this._inputOnLayout.bind(this)}
                                    style={styles.voteInput}
-                                   value={this.state.essayBody.title}
+                                   value={this.state.foodBody.foodName}
                                    underlineColorAndroid={'transparent'}
                                    maxLength={32}
-                                   placeholder='请输入文章标题'
-                                   onChangeText={(text) => this._inputInvite(text, 'title')}/>
+                                   placeholder='请输入名称'
+                                   onChangeText={(text) => this._inputInvite(text, 'foodName')}/>
                     </View>
 
                     <View style={[styles.voteGroup, {flexDirection: 'column', marginBottom: 10}]}
                           onStartShouldSetResponderCapture={this._onStartShouldSetResponderCapture.bind(this)}>
-                        <Text style={styles.voteTitle}>类型</Text>
+                        <Text style={styles.voteTitle}>热烈</Text>
                         <TextInput ref={'voteTitle'}
                                    onLayout={this._inputOnLayout.bind(this)}
                                    style={styles.voteInput}
-                                   value={this.state.essayBody.essayType}
+                                   value={this.state.foodBody.num}
                                    underlineColorAndroid={'transparent'}
                                    maxLength={32}
                                    placeholder='请输入类型'
-                                   onChangeText={(text) => this._inputInvite(text, 'essayType')}/>
-                    </View>
-                    <View style={[styles.voteGroup, {flexDirection: 'column', marginBottom: 10}]}
-                          onStartShouldSetResponderCapture={this._onStartShouldSetResponderCapture.bind(this)}>
-                        <Text style={styles.voteTitle}>文章内容</Text>
-                        <View style={{flex: 1, borderWidth: 1, borderColor: '#f0f0f0'}}
-                              onStartShouldSetResponder={() => this.refs.textArea.focus()}>
-                            <TextInput ref="textArea"
-                                       style={{fontSize: 16, padding: 2, height: 100, textAlignVertical: 'top'}}
-                                       onLayout={this._inputOnLayout.bind(this)}
-                                       multiline={true}
-                                       numberOfLines={10}
-                                       maxLength={60000}
-                                       placeholder='请输入文章内容'
-                                       underlineColorAndroid={'transparent'}
-                                       onChangeText={(text) => this._inputInvite(text, 'context')}
-                            />
-                        </View>
+                                   onChangeText={(text) => this._inputInvite(text, 'num')}/>
                     </View>
                     <TouchableOpacity style={styles.btn} onPress={() => {
-                        this.submitEssay((data)=>{
+                        this.submitFood((data)=>{
                             if(data){
-                                DeviceEventEmitter.emit('topicAddPage');
+                                DeviceEventEmitter.emit('foodAddPage');
                                 this.props.navigation.goBack();
                             }
 
                         });
                     }}>
-                        <Text style={{fontSize: 15, color: '#fff'}}>发表</Text>
+                        <Text style={{fontSize: 15, color: '#fff'}}>添加</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.btn, {backgroundColor: '#979394'}]} onPress={() => {
                             this.props.navigation.goBack();

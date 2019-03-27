@@ -106,8 +106,6 @@ export default class Register extends PureComponent {
                                     password: MD5.hex_md5(this.state.password)
                                 };
                                 this._login(Config.LOGIN, loginParam, (data) => {
-                                    console.log("++++++++++++++++++++++++++++++++++++++++======");
-                                    console.log(data);
                                     if (data.status) {
                                         Constant['user'] = data;
                                         this.props.navigation.navigate('Home')

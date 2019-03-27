@@ -1,3 +1,6 @@
+/**
+ * 咨询医生
+ */
 import React, {PureComponent} from 'react';
 import {
     Text, View, TouchableOpacity, Image, Dimensions, FlatList
@@ -5,62 +8,30 @@ import {
 import {Card, ListItem, Button, Icon, Header} from 'react-native-elements'
 
 const {width} = Dimensions.get('window');
-
+import FetchUtil from '../util/FetchUtil';
+import Config from '../util/Config';
+import Constant from "../util/Constant";
 export default class AllDoctor extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            doctors: []
+            doctors:[]
         }
     }
 
     componentDidMount() {
-        this.setState({
-            doctors: [
-                {
-                    id:1,
-                    name: 'brynn',
-                    avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-                    hospital: '南湘雅南湘雅南湘雅南湘雅南湘雅南湘雅南湘雅南湘雅'
-                },
-                {
-                    id:2,
-                    name: 'brynn',
-                    avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-                    hospital: '南湘雅南湘雅南湘雅南湘雅南湘雅南湘雅南湘雅'
-                },
-                {
-                    id:3,
-                    name: 'brynn',
-                    avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-                    hospital: '北协和北协和北协和北协和北协和北协和北协和北协和北协和北协和北协和北协和北协和北协和北协和北协和'
-                },
-                {
-                    id:4,
-                    name: 'brynn',
-                    avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-                    hospital: '北协和北协和北协和北协和北协和北协和北协和北协和北协和北协和'
-                },
-                {
-                    id:5,
-                    name: 'brynn',
-                    avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-                    hospital: '北协和北协和北协和北协和'
-                },
-                {
-                    id:6,
-                    name: 'brynn',
-                    avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-                    hospital: '北协和'
-                }
-            ]
-        })
+        this._getAllDoctors((data)=>{
+            this.setState({doctors:data});
+        });
     }
-
+    //
+    _getAllDoctors = (callback)=>{
+        let url=Config.GET_DOCTORS+"?token=lhy&userId="+Constant.user.id;
+        FetchUtil.httpGet(url,{},callback);
+    }
     _renderDoctors = ({item, index}) => {
-        console.log(item.id);
         return (
-            <Card title={item.name} key={item.id}>
+            <Card title={item.user.userName} key={item.userId}>
                 <View style={{flex:1}}>
                     <Image
                         style={{height:240}}

@@ -12,6 +12,9 @@ const options = {
         Scopes.FITNESS_BODY_READ_WRITE,
     ],
 }
+import FetchUtil from '../util/FetchUtil';
+import Config from '../util/Config';
+import Constant from "../util/Constant";
 export default class SportManage extends PureComponent{
     constructor(props){
         super(props);

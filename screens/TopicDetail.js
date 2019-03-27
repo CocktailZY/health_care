@@ -17,68 +17,46 @@ const SCREEN = width < 600 ? 6 : 10;
 const MARGIN = (SCREEN - 2) * 20;
 const headSize = (width - MARGIN) / SCREEN;
 let commentPage = 1;
-
+import FetchUtil from '../util/FetchUtil';
+import Config from '../util/Config';
+import  Constant from "../util/Constant";
 class TopicDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            topicId: '',//props.navigation.state.params.topicId,
-            topicInfo: {},
-            commentList: [],//评论列表
-            inviteContent: '',//评论全部内容
-            placeholder: '',//占位文字
-            commentPid: 0,
+            topicId: props.navigation.state.params.topicId,
+            topicInfo: {user:{userName:""},createTime:""},
+            commentList:[] ,
+            commentPid: props.navigation.state.params.topicId,
+            inviteContent:""
         }
     };
 
     componentDidMount() {
-        // this._getTopicDetails();
-        // this.keyboardDidShowListener = Keyboard.addListener('keyboardDidHide', () => {
-        // 	this.setState({
-        // 		inviteContent: '',//评论内容清空
-        // 		commentPid: 0,
-        // 	}, () => {
-        // 		this.refs.commentInput.blur();
-        // 	})
-        // });
+        //加载详情数据
+        this._getTopicDetails((data)=>{
+            this.setState({
+                topicInfo: data.essay,
+                commentList: data.discussList,
+                topicId:data.essay.id
+            });
+        });
+
     };
 
     componentWillUnmount() {
-        this.keyboardDidShowListener.remove();
+        // this.keyboardDidShowListener.remove();
         commentPage = 1;
     }
 
-    _getTopicDetails = () => {
+    _getTopicDetails = (callback) => {
+        //明天要将userId 改成id  后台接口要改
+        let url=Config.ESSAY_DETAil+"?token=lhy&userId="+Constant.user.id
         let params = {
-            ticket: this.state.ticket,
-            uuId: this.state.uuid,
-            userId: this.state.basic.userId,
-            jidNode: this.state.basic.jidNode,
-            topicId: this.state.topicId,
-            type: this.state.isLZ
+            id: this.state.topicId
         };
-        FetchUtil.netUtil(Path.getTopicDetail + ParamsDealUtil.toGetParams(params), {}, 'GET', this.props.navigation, '', (data) => {
-            if (data === "tip") {
-                // this._toast('提交会题失败！');
-                this.refs.toast.show('获取文章详情失败！', DURATION.LENGTH_SHORT);
-            } else if (data.code.toString() == '200') {
-                this.setState({
-                    topicInfo: data.data.topicInfo,
-                    isLike: data.data.islike,
-                    liskNum: data.data.liskNum,
-                    invitePeople: data.data.likeList,
-                    updateFiles: data.data.topicAttachmentList,
-                    commentList: data.data.discussList
-                }, () => {
-                    // this.forCommentList(data.data.discussList);
-                    this._commentListMap(this.state.commentList);
-                    this.forDiscussList(data.data.topicAttachmentList);
-                    // this.refs.topicHeader._changeHeaderTitle(this.state.topicInfo.title);
-                });
-            }
-        });
+        FetchUtil.httpGet(url,params,callback);
     };
-
     render() {
         return (
             <View style={styles.container}>
@@ -101,20 +79,13 @@ class TopicDetail extends Component {
                     keyboardDismissMode={'on-drag'}>
                     <View style={styles.inviteInfor}>
                         <Text style={styles.inforTitle}>{this.state.topicInfo.title}</Text>
-                        <Text style={styles.inforTitle}>{this.state.topicInfo.content}</Text>
+                        <Text style={styles.inforTitle}>{this.state.topicInfo.context}</Text>
                         <View style={{flexDirection: 'row', marginTop: 10, marginBottom: 10}}>
                             <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-                                <Image
-                                    source={require('../images/default_poster.jpg')}
-                                    // source={{
-                                    //     uri: Path.headImgNew + '?uuId=' + this.state.uuid + '&ticket=' + this.state.ticket + '&userId=' + this.state.basic.userId + '&imageName=' + this.state.topicInfo.photoId + '&imageId=' + this.state.topicInfo.photoId + '&sourceType=singleImage&jidNode='
-                                    //     // uri: Path.headImg + '?fileName=' + this.state.topicInfo.createUser + '&uuId=' + this.state.uuid + '&ticket=' + this.state.ticket + '&userId=' + this.state.basic.userId
-                                    // }}
-                                    style={{width: 30, height: 30, marginRight: 5}}/>
                                 <Text style={{
                                     fontSize: 11,
                                     color: '#999'
-                                }}>{`${this.state.topicInfo.nickName}发表于 ${this.state.topicInfo.createTime}`}</Text>
+                                }}>{`${this.state.topicInfo.user.userName}发表于 ${this.state.topicInfo.createTime}`}</Text>
                             </View>
                         </View>
                     </View>
@@ -128,14 +99,11 @@ class TopicDetail extends Component {
                     <View style={[styles.inviteBox, {flex: 1}]}>
                         {
                             this.state.commentList.map((item, index) => {
-                                // console.log(item);
+                               console.log(item);
                                 return <View key={index}
                                              style={[styles.inviteGroup, index == 0 ? {borderTopColor: 'transparent'} : null]}>
                                     <Image
-                                        source={require('../images/default_poster.jpg')}
-                                        // source={{
-                                        //     uri: Path.headImgNew + '?uuId=' + this.state.uuid + '&ticket=' + this.state.ticket + '&userId=' + this.state.basic.userId + '&imageName=' + item.photoId + '&imageId=' + item.photoId + '&sourceType=singleImage&jidNode='
-                                        // }}
+                                        source={require('../images/head.jpg')}
                                         style={styles.inviteHeadImg}/>
                                     <View style={{flex: 1, marginLeft: 10}}>
                                         <View style={{flexDirection: 'row', paddingLeft: 6}}>
@@ -143,28 +111,17 @@ class TopicDetail extends Component {
                                                 fontSize: 15,
                                                 color: '#333',
                                                 flex: 1
-                                            }}>{item.toUserName ? `${item.fromUserName} 评论 ${item.toUserName}` : `${item.fromUserName} 发表`}</Text>
+                                            }}>{`${item.user.userName}  发表评论`}</Text>
                                         </View>
-                                        <TouchableOpacity onPress={() => {
-                                            () => {
-                                                this.setState({
-                                                    commentPid: item.id,
-                                                    inviteContent: ''
-                                                }, () => {
-                                                    this.refs.commentInput.focus();
-                                                });
-                                            }
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 13,
-                                                paddingLeft: 6
-                                            }}>{item.content.replace(/<br\/>/g, '')}</Text>
-                                            <View style={{flexDirection: 'row'}}>
-                                                <Text
-                                                    style={styles.commitTime}>{item.createTime.substring(0, item.createTime.lastIndexOf(':'))}</Text>
-                                                <Text style={styles.replyBtn}>回复</Text>
-                                            </View>
-                                        </TouchableOpacity>
+                                        <Text style={{
+                                            fontSize: 13,
+                                            paddingLeft: 6
+                                        }}>{item.context}</Text>
+                                        <View style={{flexDirection: 'row'}}>
+                                            <Text
+                                                style={styles.commitTime}>{item.createTime}</Text>
+
+                                        </View>
                                     </View>
                                 </View>
                             })
@@ -183,14 +140,28 @@ class TopicDetail extends Component {
                         })}
                         onBlur={() => {
                             this.setState({
-                                inviteContent: '',//评论内容清空
-                                commentPid: 0,
+                                inviteContent: ''//评论内容清空
                             })
                         }}
                         placeholder={'请输入评论内容'}
                         underlineColorAndroid={'transparent'}/>
                     <TouchableOpacity style={styles.btn} onPress={() => {
-                        this._inviteComment()
+                        this._inviteComment((data)=>{
+                            if(data){
+                                this.setState({
+                                    inviteContent: ''
+                                }, () => {
+                                    // DeviceEventEmitter.emit('topicAddPage');//刷新文章列表
+                                    this._getTopicDetails((data)=>{
+                                        this.setState({
+                                            topicInfo: data.essay,
+                                            commentList: data.discussList,
+                                            topicId:data.essay.id
+                                        });
+                                    });
+                                });
+                            }
+                        })
                     }}>
                         <Text style={{fontSize: 14, color: '#fff'}}>评论</Text>
                     </TouchableOpacity>
@@ -200,74 +171,27 @@ class TopicDetail extends Component {
     }
 
     //提交评论或回复
-    _inviteComment = () => {//提交评论 有pid是回复
-        let pid = this.state.commentPid;
-        let content = this.state.inviteContent;
-        let placeholder = this.state.placeholder;
+    _inviteComment = (callback) => {//提交评论 有pid是回复
+        let essayId = this.state.topicId;
+        let context = this.state.inviteContent;
         this.refs.commentInput.blur();
         let body = {
-            jidNode: this.state.basic.jidNode,
-            topicId: this.state.topicInfo.id,
-            pid: pid,
-            content: content
+            context: this.state.inviteContent,
+            essayId: this.state.topicId
+
         };
-        if (content == '' || content == placeholder) {
-            this._toast('评论内容不能为空');
-        } else if (ToolUtil.isEmojiCharacterInString(content)) {
-            this._toast('评论内容不能包含非法字符');
-        } else {
+        if (context == '' ||context == null) {
+            Alert.alert('评论内容不能为空');
+        }else {
             if (this.state.topicInfo.id) {
-                FetchUtil.netUtil(Path.saveTopicDiscuss, body, 'POST', this.props.navigation, {
-                    ticket: this.state.ticket,
-                    userId: this.state.basic.userId,
-                    uuId: this.state.uuid
-                }, (responseJson) => {
-                    if (responseJson === "tip") {
-                        this._toast('评论失败！');
-                        // this.refs.toast.show('获取联系人失败！', DURATION.LENGTH_SHORT);
-                    } else if (responseJson.code.toString() == '200') {
-                        this.setState({
-                            inviteContent: '',
-                            commentPid: 0,
-                        }, () => {
-                            DeviceEventEmitter.emit('topicAddPage');//刷新文章列表
-                            this._getTopicDetails();
-                        });
-                    }
-                })
+                let url=Config.ESSAY_COMMENT+"?token=lhy&userId="+Constant.user.id
+                FetchUtil.httpGet(url,body,callback);
             } else {
-                this._toast('正在加载，请稍等');
+                Alert.alert('正在加载，请稍等');
             }
         }
     };
-    //点赞人员遍历
-    _inviteHeadItem = ({item, index}) => {
-        // console.log(item);
-        return (
-            <TouchableOpacity
-                key={index}
-                style={[styles.inviteHeadImg, index % (SCREEN - 1) < (SCREEN - 2) ? {marginRight: 10} : null]}
-                onPress={() => {
-                    () => {
-                        this.props.navigation.navigate('FriendDetail', {
-                            ticket: this.state.ticket,
-                            uuid: this.state.uuid,
-                            friendJidNode: item.createUser,
-                            tigRosterStatus: 'both',
-                            basic: this.state.basic
-                        });
-                    }
-                }}>
-                <Image
-                    source={require('../images/default_poster.jpg')}
-                    // source={{
-                    //     uri: Path.headImgNew + '?uuId=' + this.state.uuid + '&ticket=' + this.state.ticket + '&userId=' + this.state.basic.userId + '&imageName=' + item.photo + '&imageId=' + item.photo + '&sourceType=singleImage&jidNode='
-                    //     // uri: Path.headImg + '?fileName=' + item.createUser + '&uuId=' + this.state.uuid + '&ticket=' + this.state.ticket + '&userId=' + this.state.basic.userId
-                    // }}
-                    style={{width: headSize, height: headSize, borderRadius: 4}}/>
-            </TouchableOpacity>
-        )
-    };
+
 
     _commentFooter() {
         let foot;

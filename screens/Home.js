@@ -7,6 +7,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Constant from "../util/Constant";
 
 const {width} = Dimensions.get('window');
 const styles = {
@@ -63,7 +64,8 @@ const styles = {
 export default class Home extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+        };
     };
 
     render() {
@@ -109,7 +111,9 @@ export default class Home extends PureComponent {
                                     <Text style={{marginTop: 5}}>{'文章管理'}</Text>
                                 </View>
                             </TouchableOpacity>
-
+                            <TouchableOpacity style={{flex: 1}} onPress={() => {
+                                this.props.navigation.navigate('Food')
+                            }}>
                             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                                 <MaterialCommunityIcons
                                     name='food'
@@ -118,7 +122,7 @@ export default class Home extends PureComponent {
                                 />
                                 <Text style={{marginTop: 5}}>{'饮食管理'}</Text>
                             </View>
-
+                            </TouchableOpacity>
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
                                 this.props.navigation.navigate('SportManage')
                             }}>
@@ -133,22 +137,27 @@ export default class Home extends PureComponent {
                             </TouchableOpacity>
 
                         </View>
+                        <TouchableOpacity style={{flex: 1}} onPress={() => {
+                            //this.props.navigation.navigate('AllDoctor')
+                            Alert.alert("用药提示");
+                        }}>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginTop: 20}}>
+                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                <Icons
+                                    name='ios-medkit'
+                                    color='#ffa502'
+                                    size={30}
+                                />
+                                <Text style={{marginTop: 5}}>{'用药提醒'}</Text>
+                            </View>
+                        </TouchableOpacity>
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
-                                this.props.navigation.navigate('Medkit')
-                            }}>
-                                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                    <Icons
-                                        name='ios-medkit'
-                                        color='#ffa502'
-                                        size={30}
-                                    />
-                                    <Text style={{marginTop: 5}}>{'用药提醒'}</Text>
-                                </View>
-                            </TouchableOpacity>
+                                if(Constant.user.role=='doctor'){
+                                    this.props.navigation.navigate('AllDoctor')//直接进入聊天页面
+                                }else{
+                                    this.props.navigation.navigate('AllDoctor')
+                                }
 
-                            <TouchableOpacity style={{flex: 1}} onPress={() => {
-                                this.props.navigation.navigate('AllDoctor')
                             }}>
                                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
                                     <MaterialCommunityIcons
@@ -187,10 +196,8 @@ export default class Home extends PureComponent {
                         <View style={{flexDirection: 'row', paddingLeft: 5}}>
                             <View style={{width: 15, borderLeftWidth: 3, borderLeftColor: '#278EEE'}}></View>
                             <Text style={{fontSize: 16}}>{'文章推荐'}</Text>
-                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
-                                <Text onPress={() => {
-                                    this.props.navigation.navigate('Topic')
-                                }}>{'更多'}</Text>
+                            <View style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}>
+                                <Text onPress={()=>{this.props.navigation.navigate('Topic')}}>{'更多'}</Text>
                             </View>
                         </View>
                         <View style={{
@@ -268,10 +275,8 @@ export default class Home extends PureComponent {
                         <View style={{flexDirection: 'row', paddingLeft: 5}}>
                             <View style={{width: 15, borderLeftWidth: 3, borderLeftColor: '#278EEE'}}/>
                             <Text style={{fontSize: 16}}>{'名医推荐'}</Text>
-                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
-                                <Text onPress={() => {
-                                    this.props.navigation.navigate('AllDoctor')
-                                }}>{'更多'}</Text>
+                            <View style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}>
+                                <Text onPress={()=>{this.props.navigation.navigate('AllDoctor')}}>{'更多'}</Text>
                             </View>
                         </View>
                         <View style={{

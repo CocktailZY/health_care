@@ -1,43 +1,57 @@
 import React, {Component} from 'react';
 import {
-	DeviceEventEmitter,
-	Platform,
-	StyleSheet,
-	TextInput,
-	NativeModules,
-	View,BackHandler,
-	Alert
+    DeviceEventEmitter,
+    Platform,
+    StyleSheet,
+    TextInput,
+    NativeModules,
+    View, BackHandler,
+    Alert, TouchableOpacity, Text
 } from 'react-native';
 import {Header, Icon} from 'react-native-elements';
+import Config from "../util/Config";
+import Constant from "../util/Constant";
+import FetchUtil from "../util/FetchUtil";
 let lastPresTime = 1;
 export default class CheckPassword extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			text: '',
+			password: '',
+            medicalHistory:'',
 		}
 	};
-
+    fetchHealth = (password,callback) => {
+        let url=Config.HEALTH_DETAil+"?token=lhy&userId="+Constant.user.id;
+        let params={
+        	password:password
+		}
+        FetchUtil.httpGet(url,params,callback);
+    };
 	//组件渲染完毕时调用此方法
 	componentDidMount() {
 	};
 	componentWillUnmount() {
 	}
-
-	submitPassword = () => {
-		this.refs.Password.blur();
-	};
-
-	checkPassword = (text) => {
-
-		this.body = {
-			userName: this.state.basic.userName,
-			passWord: text
-		};
-
-		this.setState({
-			text: text
+//验证密码查询病情
+	checkPassword = (password) => {
+		if(password||password==''){
+			Alert.alert("请求输入6位数字密码")
+			return;
+		}
+        this.fetchHealth(password,(data)=>{
+        	if(data){
+                this.setState({
+                    medicalHistory: data.medicalHistory
+                })
+			}else{
+                this.setState({
+                    medicalHistory: '查看失败'
+                })
+			}
 		})
+
+
 	};
 	render() {
 		return (
@@ -58,13 +72,25 @@ export default class CheckPassword extends Component {
 					<TextInput
 						ref="Password"
 						style={{flex: 1, color: 'black', padding: 0, marginLeft: 12}}
-						placeholder={'请输入加密密码'}
+						placeholder={'请输入6位数字加密密码'}
 						placeholderTextColor={'#ccc'}
 						underlineColorAndroid="transparent"
-						onChangeText={(text) => this.checkPassword(text)}
+						onChangeText={(text) => this.setState({password:text})}
 						value={this.state.text}
 					/>
 				</View>
+				<View>
+					<text>{this.state.medicalHistory}</text>
+				</View>
+                <View style={{backgroundColor: '#fff', marginTop: 10, height: 48, marginBottom: 10}}>
+                    <TouchableOpacity
+                        style={[styles.menuList, styles.menuTouch, {borderTopColor: 'transparent'}]}
+                        onPress={() => {
+                            this.checkPassword(this.state.password)
+                        }}>
+                        <Text style={[styles.settingText, {flex: 1, textAlign: 'center'}]}>验证查看</Text>
+                    </TouchableOpacity>
+                </View>
 			</View>
 		)
 	}
