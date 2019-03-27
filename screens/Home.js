@@ -67,10 +67,10 @@ export default class Home extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            dataTopicSource:[],
-            dataDoctorSource:[],
-            pageNum:1,
-            pageSize:5,
+            dataTopicSource: [],
+            dataDoctorSource: [],
+            pageNum: 1,
+            pageSize: 5,
             footLoading: false,//是否可刷新
         };
     };
@@ -80,20 +80,21 @@ export default class Home extends PureComponent {
         this.fetchTopic();
         this._getDoctors();
     };
-    _getDoctors = ()=>{
-        let url=Config.PAGE_DOCTORS+"?token=lhy&userId="+Constant.user.id;
-        let params={pageNum:1,pageSize:5};
-        FetchUtil.httpGet(url,params,(data)=>{
-            this.setState({ dataDoctorSource: data.recordList})
+
+    _getDoctors = () => {
+        let url = Config.PAGE_DOCTORS + "?token=lhy&userId=" + Constant.user.id;
+        let params = {pageNum: 1, pageSize: 5};
+        FetchUtil.httpGet(url, params, (data) => {
+            this.setState({dataDoctorSource: data.recordList})
         });
     }
     fetchTopic = () => {
-        let url = Config.ESSAY+"?token=lhy&userId="+Constant.user.id;
+        let url = Config.ESSAY + "?token=lhy&userId=" + Constant.user.id;
         let params = {
             pageNum: 1,
             pageSize: 5
         };
-        FetchUtil.httpGet(url ,params,(data)=>{
+        FetchUtil.httpGet(url, params, (data) => {
             this.setState({
                 dataTopicSource: data.recordList
             })
@@ -104,34 +105,34 @@ export default class Home extends PureComponent {
     _renderEssayListItem = ({item, index}) => {
         return (
             <View>
-            <TouchableHighlight
-                activeOpacity={1}
-                underlayColor='#FFFFFF'
-                style={{backgroundColor: '#FFFFFF'}}
-                onPress={() => {
-                    this.props.navigation.navigate('TopicDetail', {
-                        topicId: item.id//文章详情
-                    });
-                }}>
-                <View style={[styles.flex1, {padding: 8}]}>
-                    <View style={styles.itemTitleView}>
-                        {/*<Image source={require('../../images/icon_talk.png')} style={{width: 30, height: 30}}/>*/}
-                        <Text style={styles.itemTitleText} numberOfLines={1}>{item.title}</Text>
-                    </View>
-                    <View style={styles.bottomSeparator}></View>
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{width: 200}}>
-                            <Text style={styles.itemBottomText} numberOfLines={1}>{`${item.createTime}发表`}</Text>
+                <TouchableHighlight
+                    activeOpacity={1}
+                    underlayColor='#FFFFFF'
+                    style={{backgroundColor: '#FFFFFF'}}
+                    onPress={() => {
+                        this.props.navigation.navigate('TopicDetail', {
+                            topicId: item.id//文章详情
+                        });
+                    }}>
+                    <View style={[styles.flex1, {padding: 8}]}>
+                        <View style={styles.itemTitleView}>
+                            {/*<Image source={require('../../images/icon_talk.png')} style={{width: 30, height: 30}}/>*/}
+                            <Text style={styles.itemTitleText} numberOfLines={1}>{item.title}</Text>
+                        </View>
+                        <View style={styles.bottomSeparator}></View>
+                        <View style={{flexDirection: 'row'}}>
+                            <View style={{width: 200}}>
+                                <Text style={styles.itemBottomText} numberOfLines={1}>{`${item.createTime}发表`}</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
-            </TouchableHighlight>
-            <View style={{
-                marginTop: 10,
+                </TouchableHighlight>
+                <View style={{
+                    marginTop: 10,
                     marginBottom: 10,
                     borderBottomColor: '#d4d4d4',
                     borderBottomWidth: 1
-             }}/>
+                }}/>
             </View>
         )
     };
@@ -139,28 +140,29 @@ export default class Home extends PureComponent {
     renderDoctorListItem = ({item, index}) => {
         return (
             <View>
-            <View style={{flexDirection: 'row'}}>
-                <View>
-                    <Image source={require('../images/default_poster.jpg')} style={{width: 70, height: 100}}
-                           resizeMode={'stretch'} resizeMethod={'scale'}/>
-                </View>
-                <View style={{flex: 1, paddingLeft: 10}}>
-                    <View style={{justifyContent: 'center'}}>
-                        <Text style={{marginBottom: 5}}>{item.user.userName}</Text>
-                        <Text style={{color: '#a4b0be', fontSize: 12}}>{item.offices}</Text>
-                        <Text style={{color: '#a4b0be', fontSize: 12}}>{item.hospital}</Text>
+                <View style={{flexDirection: 'row'}}>
+                    <View>
+                        <Image source={require('../images/default_poster.jpg')} style={{width: 70, height: 100}}
+                               resizeMode={'stretch'} resizeMethod={'scale'}/>
+                    </View>
+                    <View style={{flex: 1, paddingLeft: 10}}>
+                        <View style={{justifyContent: 'center'}}>
+                            <Text style={{marginBottom: 5}}>{item.user.userName}</Text>
+                            <Text style={{color: '#a4b0be', fontSize: 12}}>{item.offices}</Text>
+                            <Text style={{color: '#a4b0be', fontSize: 12}}>{item.hospital}</Text>
+                        </View>
                     </View>
                 </View>
-            </View>
-            <View style={{
-            marginTop: 10,
-                marginBottom: 10,
-                borderBottomColor: '#d4d4d4',
-                borderBottomWidth: 1
-            }}/>
+                <View style={{
+                    marginTop: 10,
+                    marginBottom: 10,
+                    borderBottomColor: '#d4d4d4',
+                    borderBottomWidth: 1
+                }}/>
             </View>
         )
     };
+
     render() {
         return (
             <View style={styles.container}>
@@ -251,33 +253,50 @@ export default class Home extends PureComponent {
                                     </View>
                                 </View>
                             </TouchableOpacity>
+
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
                                 if (Constant.user.role == 'doctor') {
                                     this.props.navigation.navigate('AllDoctor')//直接进入聊天页面
                                 } else {
                                     this.props.navigation.navigate('AllDoctor')
                                 }
-
                             }}>
-                                <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                                    <MaterialCommunityIcons
-                                        name='doctor'
-                                        color='#FD7272'
-                                        size={30}
-                                    />
-                                    <Text style={{marginTop: 5}}>{'咨询医生'}</Text>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        marginTop: 20
+                                    }}>
+                                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                        <MaterialCommunityIcons
+                                            name='doctor'
+                                            color='#FD7272'
+                                            size={30}
+                                        />
+                                        <Text style={{marginTop: 5}}>{'咨询医生'}</Text>
+                                    </View>
                                 </View>
                             </TouchableOpacity>
+
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
                                 this.props.navigation.navigate('UserCenter')
                             }}>
-                                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                    <Icon
-                                        name='child'
-                                        color='#517fa4'
-                                        size={30}
-                                    />
-                                    <Text style={{marginTop: 5}}>{'个人中心'}</Text>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        marginTop: 20
+                                    }}>
+                                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                        <Icon
+                                            name='child'
+                                            color='#517fa4'
+                                            size={30}
+                                        />
+                                        <Text style={{marginTop: 5}}>{'个人中心'}</Text>
+                                    </View>
                                 </View>
                             </TouchableOpacity>
                         </View>
