@@ -18,6 +18,7 @@ import {Header, Icon} from 'react-native-elements';
 import FetchUtil from '../util/FetchUtil';
 import Config from '../util/Config';
 import  Constant from "../util/Constant";
+import RNAlarm from "react-native-alarm";
 const inputComponents = [], ACT_HEIGHT = 38;
 export  default  class DrugsPublish extends Component {
     constructor(props) {
@@ -66,7 +67,7 @@ export  default  class DrugsPublish extends Component {
                     console.log(this.state.drugsBody)
                 });
             }else{
-                Alert.alert("请输入正在数");
+                Alert.alert("请输入正整数");
             }
         }else{
             body[key] = text;
@@ -99,8 +100,33 @@ export  default  class DrugsPublish extends Component {
             Alert.alert('每次喝药结束日期不得为空');
         }else {
             let url =Config.DRUGS_SAVE+"?token=ly&userId="+Constant.user.id;
-            FetchUtil.httpGet(url,body,callback);
+            FetchUtil.httpGet(url,body,(data)=>{
+                if(data){
+                    this._serAlarm();
+                }
+
+            });
         }
+    };
+
+    //设置闹钟
+    _serAlarm = () => {
+        let time = this.state.drugsBody.startTime;//Date.parse('Mon March 27 2019 22:47:00 GMT+0800 (GMT)').toString();
+        let time1 = this.state.drugsBody.endTime;//Date.parse('Mon March 29 2019 07:27:00 GMT+0800 (GMT)').toString();
+        console.log(time);
+        RNAlarm.setAlarm(time,
+            this.state.drugsBody.drugsName+':'+this.state.drugsBody.drugsNum,
+            time1,
+            '',
+            () => {
+                console.log("闹钟设置成功");
+                DeviceEventEmitter.emit('drugsAddPage');
+                this.props.navigation.goBack();
+            },
+            () => {
+                console.log("闹钟设置失败");
+                // Fail callback function
+            });
     };
 
     render() {
@@ -185,13 +211,7 @@ export  default  class DrugsPublish extends Component {
                                    onChangeText={(text) => this._inputInvite(text, 'endTime')}/>
                     </View>
                     <TouchableOpacity style={styles.btn} onPress={() => {
-                        this.submitFood((data)=>{
-                            if(data){
-                                DeviceEventEmitter.emit('drugsAddPage');
-                                this.props.navigation.goBack();
-                            }
-
-                        });
+                        this.submitFood();
                     }}>
                         <Text style={{fontSize: 15, color: '#fff'}}>添加</Text>
                     </TouchableOpacity>

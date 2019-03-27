@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
     Text, View, TouchableOpacity, Image, Dimensions, ScrollView,
     DatePickerAndroid
@@ -9,24 +9,25 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNAlarm from 'react-native-alarm';
-import {Header} from "react-native-elements";
-const {width} = Dimensions.get('window');
+import { Header } from "react-native-elements";
+const { width } = Dimensions.get('window');
 
-export default class Medkit extends PureComponent{
-    constructor(props){
+export default class Medkit extends PureComponent {
+    constructor(props) {
         super(props);
-        this.state={
-            title:'该吃药啦！',
-            time: new Date()+''
+        this.state = {
+            title: '该吃药啦！',
+            time: new Date() + ''
         }
     }
-    componentDidMount(){
+    componentDidMount() {
         // let time=1553503205414+120000;
-        let time=Date.parse('Mon March 25 2019 23:27:00 GMT+0800 (GMT)').toString();
+        let time = Date.parse('Mon March 27 2019 22:47:00 GMT+0800 (GMT)').toString();
+        let time1 = Date.parse('Mon March 29 2019 07:27:00 GMT+0800 (GMT)').toString();
         console.log(time);
         RNAlarm.setAlarm(time,
             'Meeting with customer',
-            '',
+            time1,
             '',
             () => {
                 console.log("闹钟设置成功");
@@ -38,9 +39,9 @@ export default class Medkit extends PureComponent{
                 // Fail callback function
             });
     }
-    render(){
-        return(
-            <View style={{flex:1}}>
+    render() {
+        return (
+            <View style={{ flex: 1 }}>
                 <Header
                     placement="left"
                     leftComponent={
@@ -51,9 +52,9 @@ export default class Medkit extends PureComponent{
                             onPress={() => this.props.navigation.goBack()}
                         />
                     }
-                    centerComponent={{text: '用药提醒', style: {color: '#fff', fontSize: 18}}}
+                    centerComponent={{ text: '用药提醒', style: { color: '#fff', fontSize: 18 } }}
                 />
-                <View style={{flex:1,justifyContent: 'center',alignItems:'center'}}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 
                 </View>
             </View>
