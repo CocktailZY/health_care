@@ -92,26 +92,39 @@ export default FetchUtil = {
              .catch((error) => {
                  Alert.alert('提示', '网络链接出错');
                  console.error(error);
-             });
-    // return new Promise(function (resolve, reject) {
-    //     fetch(url, init)
-    //         .then(response => {
-    //             console.log(response)
-    //             return response;
-	// 		})
-    //         .then(data => {
-    //         	console.log(data)
-    //             // if (data.code === 200) {
-    //             //     resolve(data);
-    //             // } else {
-    //             //     callback(data);
-    //             // }
-    //         }).catch(function (ex) {
-    //         reject(ex);
-    //         Alert.alert('错误提示', '网络链接出错');
-    //     });
-    // });
-}
+             })
+},httpPost(url,data,callback) {
+        if(data){
+            let param="";
+            for(let i in data){
+                param+='&'+i +"="+encodeURI(data[i]);
+            }
+            //  param=param.replace('&',"?");
+            url+=param;
+        }
+        console.log(url);
+        let init = {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            }
+        };
+        fetch(url, init) .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                if(data.code==200){
+                    callback(data.data)
+                }else{
+                    Alert.alert('提示', '网络链接出错');
+                }
+            })
+            .catch((error) => {
+                Alert.alert('提示', '网络链接出错');
+                console.error(error);
+            })
+    }
 
 };
 
