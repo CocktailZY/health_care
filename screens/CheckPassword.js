@@ -81,7 +81,7 @@ export default class CheckPassword extends Component {
 						value={this.state.password}
 					/>
 				</View>
-				<View>
+				<View style={{flex:1,margin: 12,backgroundColor:'#ffffff',padding:8}}>
 					<Text>{this.state.medicalHistory}</Text>
 				</View>
                 <View style={{backgroundColor: '#fff', marginTop: 10, height: 48, marginBottom: 10}}>
@@ -107,5 +107,54 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		height: 40,
 		marginTop: 20
-	}
+	},
+    menuList: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        height: 48,
+    },
+    icons: {
+        width: 30,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        // backgroundColor:'tomato'
+        // marginLeft: 12,
+        // marginRight: 10,
+    },
+    menuListText: {
+        flex: 1,
+        height: 48,
+        justifyContent: 'center',
+        borderTopWidth: 1,
+        borderTopColor: '#cecece',
+    },
+    iconRight: {
+        width: 10,
+        textAlign: 'right',
+        marginRight: 12,
+    },
+    btn: {
+        height: 43,
+        borderRadius: 4,
+        backgroundColor: '#f00',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 14,
+        marginLeft: 12,
+        marginRight: 12
+    },
+    settingText: {
+        lineHeight: 48,
+        color: '#333',
+        fontSize: 14,
+    },
+    menuTouch: {
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderTopColor: '#cecece',
+        borderTopWidth: 1,
+    },
 });
