@@ -22,7 +22,7 @@ import  Constant from "../util/Constant";
 
 const {width, height} = Dimensions.get('window');
 
-class Food extends Component {
+export default class Drugs extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,13 +37,13 @@ class Food extends Component {
 
     componentDidMount() {
         //监听新建饮食，返回刷新列表
-        DeviceEventEmitter.addListener("foodAddPage",()=>{
-            this.fetchFood(1,(data) =>{
-                this.FoodListCallBack(data);
+        DeviceEventEmitter.addListener("drugsAddPage",()=>{
+            this.fetchDrugs(1,(data) =>{
+                this.DrugsListCallBack(data);
             });
         })
-        this.fetchFood(1,(data) =>{
-            this.FoodListCallBack(data);
+        this.fetchDrugs(1,(data) =>{
+            this.DrugsListCallBack(data);
         });
     };
 
@@ -52,8 +52,8 @@ class Food extends Component {
     };
 
     //获取话题列表数据
-    fetchFood = (pageNum,callback) => {
-        let url = Config.GET_FOODS+"?token=lhy&userId="+Constant.user.id;
+    fetchDrugs = (pageNum,callback) => {
+        let url = Config.DRUGS+"?token=lhy&userId="+Constant.user.id;
         let params = {
             pageNum: pageNum,
             pageSize: Constant.pageSize
@@ -61,7 +61,7 @@ class Food extends Component {
         FetchUtil.httpGet(url ,params,callback);
     };
     //获取投票列表数据回调
-    FoodListCallBack= (res) => {
+    DrugsListCallBack= (res) => {
         console.log(res);
         let dataArr = [];
         if (res.currentPage <= 1) {
@@ -95,8 +95,8 @@ class Food extends Component {
                             let tempNowPage = this.state.pageNum + 1;
                             this.setState({footLoading: true}, () => {
                                 //获取数据
-                                this.fetchFood(tempNowPage,(data) =>{
-                                    this.FoodListCallBack(data);
+                                this.fetchDrugs(tempNowPage,(data) =>{
+                                    this.DrugsListCallBack(data);
                                 });
                             });
                         }}
@@ -119,20 +119,30 @@ class Food extends Component {
 
     _renderListItem = ({item, index}) => {
         return (
+            <TouchableHighlight
+                activeOpacity={1}
+                underlayColor='#FFFFFF'
+                style={{backgroundColor: '#FFFFFF'}}
+                onPress={() => {
+                    this.props.navigation.navigate('DrugsDetail', {
+                        drugsId: item.id//文章详情
+                    });
+                }}>
                 <View style={[styles.flex1, {padding: 8}]}>
                     <View style={styles.itemTitleView}>
-                        <Text style={styles.itemTitleText} numberOfLines={1}>{item.foodName}</Text>
+                        <Text style={styles.itemTitleText} numberOfLines={1}>{item.drugsName}</Text>
                     </View>
                     <View style={styles.bottomSeparator}></View>
                     <View style={{flexDirection: 'row'}}>
                         <View style={{width: 80}}>
-                            <Text style={styles.itemBottomText} numberOfLines={1}>{`热量：${item.num}`}</Text>
+                            <Text style={styles.itemBottomText} numberOfLines={1}>{`数量：${item.drugsNum}`}</Text>
                         </View>
-                        <View style={{width: 200}}>
+                        <View style={{width: 200,textAlign: 'right'}}>
                             <Text style={styles.itemBottomText} numberOfLines={1}>{`时间：${item.createTime}`}</Text>
                         </View>
                     </View>
                 </View>
+            </TouchableHighlight>
         )
     };
 
@@ -150,13 +160,13 @@ class Food extends Component {
                             onPress={() => this.props.navigation.goBack()}
                         />
                     }
-                    centerComponent={{text: '饮食列表', style: {color: '#fff', fontSize: 18}}}
+                    centerComponent={{text: '用药列表', style: {color: '#fff', fontSize: 18}}}
                     rightComponent={
                         <Icon
                             name='plus'
                             type='font-awesome'
                             color='#ffffff'
-                            onPress={() => {this.props.navigation.navigate('FoodPublish')}}
+                            onPress={() => {this.props.navigation.navigate('DrugsPublish')}}
                         />
                     }
                 />
@@ -174,8 +184,8 @@ class Food extends Component {
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     onRefresh={() => {
-                        this.fetchFood(1,(data) =>{
-                            this.FoodListCallBack(data);
+                        this.fetchDrugs(1,(data) =>{
+                            this.DrugsListCallBack(data);
                         });
                     }}
                     ListFooterComponent={() => this._renderFooter()}
@@ -185,7 +195,6 @@ class Food extends Component {
     }
 }
 
-export default Food;
 
 const styles = StyleSheet.create({
     container: {

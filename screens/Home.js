@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {
-    Text, View, TouchableOpacity, Image, Dimensions, ScrollView
+    Text, View, TouchableOpacity, Image, Dimensions, ScrollView, TouchableHighlight, FlatList, DeviceEventEmitter
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import Feather from 'react-native-vector-icons/Feather';
@@ -8,6 +8,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Constant from "../util/Constant";
+import Config from "../util/Config";
+import FetchUtil from "../util/FetchUtil";
 
 const {width} = Dimensions.get('window');
 const styles = {
@@ -65,9 +67,100 @@ export default class Home extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            dataTopicSource:[],
+            dataDoctorSource:[],
+            pageNum:1,
+            pageSize:5,
+            footLoading: false,//是否可刷新
         };
     };
 
+    componentDidMount() {
+        //监听新建文章，返回刷新列表
+        this.fetchTopic();
+        this._getDoctors();
+    };
+    _getDoctors = ()=>{
+        let url=Config.PAGE_DOCTORS+"?token=lhy&userId="+Constant.user.id;
+        let params={pageNum:1,pageSize:5};
+        FetchUtil.httpGet(url,params,(data)=>{
+            this.setState({ dataDoctorSource: data.recordList})
+        });
+    }
+    fetchTopic = () => {
+        let url = Config.ESSAY+"?token=lhy&userId="+Constant.user.id;
+        let params = {
+            pageNum: 1,
+            pageSize: 5
+        };
+        FetchUtil.httpGet(url ,params,(data)=>{
+            this.setState({
+                dataTopicSource: data.recordList
+            })
+        });
+    };
+
+    //文章
+    _renderEssayListItem = ({item, index}) => {
+        return (
+            <View>
+            <TouchableHighlight
+                activeOpacity={1}
+                underlayColor='#FFFFFF'
+                style={{backgroundColor: '#FFFFFF'}}
+                onPress={() => {
+                    this.props.navigation.navigate('TopicDetail', {
+                        topicId: item.id//文章详情
+                    });
+                }}>
+                <View style={[styles.flex1, {padding: 8}]}>
+                    <View style={styles.itemTitleView}>
+                        {/*<Image source={require('../../images/icon_talk.png')} style={{width: 30, height: 30}}/>*/}
+                        <Text style={styles.itemTitleText} numberOfLines={1}>{item.title}</Text>
+                    </View>
+                    <View style={styles.bottomSeparator}></View>
+                    <View style={{flexDirection: 'row'}}>
+                        <View style={{width: 200}}>
+                            <Text style={styles.itemBottomText} numberOfLines={1}>{`${item.createTime}发表`}</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableHighlight>
+            <View style={{
+                marginTop: 10,
+                    marginBottom: 10,
+                    borderBottomColor: '#d4d4d4',
+                    borderBottomWidth: 1
+             }}/>
+            </View>
+        )
+    };
+    //医生
+    renderDoctorListItem = ({item, index}) => {
+        return (
+            <View>
+            <View style={{flexDirection: 'row'}}>
+                <View>
+                    <Image source={require('../images/default_poster.jpg')} style={{width: 70, height: 100}}
+                           resizeMode={'stretch'} resizeMethod={'scale'}/>
+                </View>
+                <View style={{flex: 1, paddingLeft: 10}}>
+                    <View style={{justifyContent: 'center'}}>
+                        <Text style={{marginBottom: 5}}>{item.user.userName}</Text>
+                        <Text style={{color: '#a4b0be', fontSize: 12}}>{item.offices}</Text>
+                        <Text style={{color: '#a4b0be', fontSize: 12}}>{item.hospital}</Text>
+                    </View>
+                </View>
+            </View>
+            <View style={{
+            marginTop: 10,
+                marginBottom: 10,
+                borderBottomColor: '#d4d4d4',
+                borderBottomWidth: 1
+            }}/>
+            </View>
+        )
+    };
     render() {
         return (
             <View style={styles.container}>
@@ -114,17 +207,17 @@ export default class Home extends PureComponent {
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
                                 this.props.navigation.navigate('Food')
                             }}>
-                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                <MaterialCommunityIcons
-                                    name='food'
-                                    color='#FFC312'
-                                    size={30}
-                                />
-                                <Text style={{marginTop: 5}}>{'饮食管理'}</Text>
-                            </View>
+                                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                    <MaterialCommunityIcons
+                                        name='food'
+                                        color='#FFC312'
+                                        size={30}
+                                    />
+                                    <Text style={{marginTop: 5}}>{'饮食管理'}</Text>
+                                </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
-                                this.props.navigation.navigate('SportManage')
+                                this.props.navigation.navigate('Motion')
                             }}>
                                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                                     <Icons
@@ -137,24 +230,31 @@ export default class Home extends PureComponent {
                             </TouchableOpacity>
 
                         </View>
-                        <TouchableOpacity style={{flex: 1}} onPress={() => {
-                            //this.props.navigation.navigate('AllDoctor')
-                            Alert.alert("用药提示");
-                        }}>
-                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around', marginTop: 20}}>
-                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                                <Icons
-                                    name='ios-medkit'
-                                    color='#ffa502'
-                                    size={30}
-                                />
-                                <Text style={{marginTop: 5}}>{'用药提醒'}</Text>
-                            </View>
-                        </TouchableOpacity>
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
-                                if(Constant.user.role=='doctor'){
+                                this.props.navigation.navigate('Drugs')
+                            }}>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        marginTop: 20
+                                    }}>
+                                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                        <Icons
+                                            name='ios-medkit'
+                                            color='#ffa502'
+                                            size={30}
+                                        />
+                                        <Text style={{marginTop: 5}}>{'用药提醒'}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{flex: 1}} onPress={() => {
+                                if (Constant.user.role == 'doctor') {
                                     this.props.navigation.navigate('AllDoctor')//直接进入聊天页面
-                                }else{
+                                } else {
                                     this.props.navigation.navigate('AllDoctor')
                                 }
 
@@ -168,7 +268,6 @@ export default class Home extends PureComponent {
                                     <Text style={{marginTop: 5}}>{'咨询医生'}</Text>
                                 </View>
                             </TouchableOpacity>
-
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
                                 this.props.navigation.navigate('UserCenter')
                             }}>
@@ -196,8 +295,10 @@ export default class Home extends PureComponent {
                         <View style={{flexDirection: 'row', paddingLeft: 5}}>
                             <View style={{width: 15, borderLeftWidth: 3, borderLeftColor: '#278EEE'}}></View>
                             <Text style={{fontSize: 16}}>{'文章推荐'}</Text>
-                            <View style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}>
-                                <Text onPress={()=>{this.props.navigation.navigate('Topic')}}>{'更多'}</Text>
+                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
+                                <Text onPress={() => {
+                                    this.props.navigation.navigate('Topic')
+                                }}>{'更多'}</Text>
                             </View>
                         </View>
                         <View style={{
@@ -206,61 +307,21 @@ export default class Home extends PureComponent {
                             borderBottomColor: '#d4d4d4',
                             borderBottomWidth: 1
                         }}/>
-                        <TouchableOpacity onPress={() => {
-                            this.props.navigation.navigate('TodoDetail')
-                        }}>
-                            <View style={{flex: 1}}>
-                                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                    <Feather name='file-text' size={16} color={'#a4b0be'}/>
-                                    <Text style={{marginLeft: 8}}>{'工程监控项目的立项申请'}</Text>
-                                </View>
-                                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', paddingTop: 5}}>
-                                    <Feather name='user' size={16} color={'#a4b0be'}/>
-                                    <Text style={{color: '#a4b0be', fontSize: 13, marginLeft: 8}}>
-                                        {'王晓辉'}
-                                        <Text style={{fontSize: 10, paddingLeft: 10}}>{'2018.09.12 10:00'}</Text>
-                                    </Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={{
-                            marginTop: 10,
-                            marginBottom: 10,
-                            borderBottomColor: '#d4d4d4',
-                            borderBottomWidth: 1
-                        }}/>
-                        <View style={{flex: 1}}>
-                            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Feather name='file-text' size={16} color={'#a4b0be'}/>
-                                <Text style={{marginLeft: 8}}>{'工程监控项目的立项申请'}</Text>
-                            </View>
-                            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', paddingTop: 5}}>
-                                <Feather name='user' size={16} color={'#a4b0be'}/>
-                                <Text style={{color: '#a4b0be', fontSize: 13, marginLeft: 8}}>
-                                    {'王晓辉'}
-                                    <Text style={{fontSize: 10, paddingLeft: 10}}>{'2018.09.12 10:00'}</Text>
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={{
-                            marginTop: 10,
-                            marginBottom: 10,
-                            borderBottomColor: '#d4d4d4',
-                            borderBottomWidth: 1
-                        }}/>
-                        <View style={{flex: 1}}>
-                            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                <Feather name='file-text' size={16} color={'#a4b0be'}/>
-                                <Text style={{marginLeft: 8}}>{'工程监控项目的立项申请'}</Text>
-                            </View>
-                            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', paddingTop: 5}}>
-                                <Feather name='user' size={16} color={'#a4b0be'}/>
-                                <Text style={{color: '#a4b0be', fontSize: 13, marginLeft: 8}}>
-                                    {'王晓辉'}
-                                    <Text style={{fontSize: 10, paddingLeft: 10}}>{'2018.09.12 10:00'}</Text>
-                                </Text>
-                            </View>
-                        </View>
+                        <FlatList
+                            keyExtractor={(item, index) => String(index)}
+                            extraData={this.state}
+                            data={this.state.dataTopicSource}
+                            renderItem={this._renderEssayListItem}
+                            ItemSeparatorComponent={() => <View style={styles.separator}></View>}
+                            ListEmptyComponent={() => <View
+                                style={{height: 100, justifyContent: 'center', alignItems: 'center'}}>
+                                <Text style={{fontSize: 16, color: '#999'}}>暂无数据</Text>
+                            </View>}
+                            refreshing={false}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                        />
+
                     </View>
                     {/*名医推荐*/}
                     <View style={{
@@ -275,8 +336,10 @@ export default class Home extends PureComponent {
                         <View style={{flexDirection: 'row', paddingLeft: 5}}>
                             <View style={{width: 15, borderLeftWidth: 3, borderLeftColor: '#278EEE'}}/>
                             <Text style={{fontSize: 16}}>{'名医推荐'}</Text>
-                            <View style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}>
-                                <Text onPress={()=>{this.props.navigation.navigate('AllDoctor')}}>{'更多'}</Text>
+                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
+                                <Text onPress={() => {
+                                    this.props.navigation.navigate('AllDoctor')
+                                }}>{'更多'}</Text>
                             </View>
                         </View>
                         <View style={{
@@ -285,63 +348,17 @@ export default class Home extends PureComponent {
                             borderBottomColor: '#d4d4d4',
                             borderBottomWidth: 1
                         }}/>
-                        <View style={{flexDirection: 'row'}}>
-                            <View>
-                                <Image source={require('../images/default_poster.jpg')} style={{width: 70, height: 100}}
-                                       resizeMode={'stretch'} resizeMethod={'scale'}/>
-                            </View>
-                            <View style={{flex: 1, paddingLeft: 10}}>
-                                <View style={{justifyContent: 'center'}}>
-                                    <Text style={{marginBottom: 5}}>{'王五'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'男'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'35岁'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'心脏外科'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'北京协和医院'}</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{
-                            marginTop: 10,
-                            marginBottom: 10,
-                            borderBottomColor: '#d4d4d4',
-                            borderBottomWidth: 1
-                        }}/>
-                        <View style={{flexDirection: 'row'}}>
-                            <View>
-                                <Image source={require('../images/default_poster.jpg')} style={{width: 70, height: 100}}
-                                       resizeMode={'stretch'} resizeMethod={'scale'}/>
-                            </View>
-                            <View style={{flex: 1, paddingLeft: 10}}>
-                                <View style={{justifyContent: 'center'}}>
-                                    <Text style={{marginBottom: 5}}>{'王五'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'男'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'35岁'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'心脏外科'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'北京协和医院'}</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{
-                            marginTop: 10,
-                            marginBottom: 10,
-                            borderBottomColor: '#d4d4d4',
-                            borderBottomWidth: 1
-                        }}/>
-                        <View style={{flexDirection: 'row'}}>
-                            <View>
-                                <Image source={require('../images/default_poster.jpg')} style={{width: 70, height: 100}}
-                                       resizeMode={'stretch'} resizeMethod={'scale'}/>
-                            </View>
-                            <View style={{flex: 1, paddingLeft: 10}}>
-                                <View style={{justifyContent: 'center'}}>
-                                    <Text style={{marginBottom: 5}}>{'王五'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'男'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'35岁'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'心脏外科'}</Text>
-                                    <Text style={{color: '#a4b0be', fontSize: 12}}>{'北京协和医院'}</Text>
-                                </View>
-                            </View>
-                        </View>
+                        <FlatList
+                            data={this.state.dataDoctorSource}
+                            renderItem={this.renderDoctorListItem}
+                            ItemSeparatorComponent={() => <View style={styles.separator}></View>}
+                            ListEmptyComponent={() => <View
+                                style={{height: 100, justifyContent: 'center', alignItems: 'center'}}>
+                                <Text style={{fontSize: 16, color: '#999'}}>暂无数据</Text>
+                            </View>}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                        />
                     </View>
                 </ScrollView>
             </View>

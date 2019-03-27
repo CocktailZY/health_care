@@ -52,7 +52,7 @@ export default class Setting extends Component {
     };
 
 //推出登陆，直接退出，不用调请求
-    _logout = () =>
+    _logout = () => {
         this.props.navigation.dispatch(StackActions.reset({
             index: 0,
             actions: [
@@ -60,7 +60,7 @@ export default class Setting extends Component {
             ]
         }))
     };
-    render() {
+    render(){
         const {showAlert, tipMsg} = this.state;
         return (
             <View style={styles.container}>
@@ -110,8 +110,7 @@ export default class Setting extends Component {
                                     borderColor: '#fff'
                                 }}/>
                         <View style={{marginLeft: 15}}>
-                            <Text style={{color: '#FFFFFF', marginBottom: 5}}>{this.state.userName}</Text>
-                            <Text style={{color: '#FFFFFF'}}>{'zhangsan@163.com'}</Text>
+                            <Text style={{color: '#FFFFFF', marginBottom: 5}}>{Constant.user.userCode}</Text>
                         </View>
                     </View>
                 </View>
@@ -175,7 +174,7 @@ export default class Setting extends Component {
                         }
                     </View>
 
-                    <View style={{backgroundColor: '#fff', marginTop: 10, height: 48, marginBottom: 10}}>
+                    <View style={{flex:1,backgroundColor: '#fff', marginTop: 10, height: 48, marginBottom: 10}}>
                         <TouchableOpacity
                             style={[styles.menuList, styles.menuTouch, {borderTopColor: 'transparent'}]}
                             onPress={() => {

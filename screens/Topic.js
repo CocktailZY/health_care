@@ -96,7 +96,9 @@ class Topic extends Component {
                             let tempNowPage = this.state.pageNum + 1;
                             this.setState({footLoading: true}, () => {
                                 //获取数据
-                                this.fetchTopic(tempNowPage);
+                                this.fetchTopic(tempNowPage,(data) =>{
+                                    this.topicListCallBack(data);
+                                });
                             });
                         }}
                     >
@@ -134,7 +136,7 @@ class Topic extends Component {
                     </View>
                     <View style={styles.bottomSeparator}></View>
                     <View style={{flexDirection: 'row'}}>
-                        <View style={{width: 80}}>
+                        <View style={{width: 200}}>
                             <Text style={styles.itemBottomText} numberOfLines={1}>{`${item.createTime}发表`}</Text>
                         </View>
                     </View>

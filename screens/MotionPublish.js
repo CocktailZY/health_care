@@ -19,14 +19,14 @@ import FetchUtil from '../util/FetchUtil';
 import Config from '../util/Config';
 import  Constant from "../util/Constant";
 const inputComponents = [], ACT_HEIGHT = 38;
-class FoodPublish extends Component {
+export  default class MotionPublish extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            foodBody: {
-                foodName: '',
-                num: '',
+            motionBody: {
+                motionName: '跑步',
+                stepNum: '',
             },
         }
     };
@@ -51,16 +51,15 @@ class FoodPublish extends Component {
     //处理TextInput失焦聚焦问题 end
 
     _inputInvite = (text, key) => {
-        let body = this.state.foodBody;
-        if(key=="num"){
+        let body = this.state.motionBody;
+        if(key=="stepNum"){
             let reg=/^[1-9]\d*$/;
             var pattern=new RegExp(reg);
             if(pattern.test(text)){
                 body[key] = text;
                 this.setState({
-                    foodBody: body
+                    motionBody: body
                 }, () => {
-                    console.log(this.state.foodBody)
                 });
             }else{
                 Alert.alert("请输入正在数");
@@ -68,25 +67,22 @@ class FoodPublish extends Component {
         }else{
             body[key] = text;
             this.setState({
-                foodBody: body
+                motionBody: body
             }, () => {
-                console.log(this.state.foodBody)
+                console.log(this.state.motionBody)
             });
         }
 
     };
 
     //提交饮食数据
-    submitFood = (callback) => {
-        let body = this.state.foodBody;
-        if (body.foodName == '') {
-            Alert.alert('名称不得为空');
-        } else if (body.foodName.length > 32) {
-            Alert.alert('名称长度不得超过32位');
-        } else if (body.num == '') {
-            Alert.alert('内容不得为空');
+    submitMotion = (callback) => {
+        let body = this.state.motionBody;
+        body['motionName']='跑步'
+        if (body.setpNum == '') {
+            Alert.alert('步数不得为空');
         }else {
-            let url =Config.FOOD_SAVE+"?token=ly&userId="+Constant.user.id;
+            let url =Config.MOTION_SAVE+"?token=ly&userId="+Constant.user.id;
             FetchUtil.httpGet(url,body,callback);
         }
     };
@@ -104,42 +100,29 @@ class FoodPublish extends Component {
                             onPress={() => this.props.navigation.goBack()}
                         />
                     }
-                    centerComponent={{text: '添加饮食', style: {color: '#fff', fontSize: 18}}}
+                    centerComponent={{text: '添加步数', style: {color: '#fff', fontSize: 18}}}
                 />
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     keyboardShouldPersistTaps={'always'}
                     style={{flex: 1, backgroundColor: 'white', paddingLeft: 15, paddingRight: 15}}>
-                    <View style={[styles.voteGroup, {borderTopColor: 'transparent'}]}
-                          onStartShouldSetResponderCapture={this._onStartShouldSetResponderCapture.bind(this)}>
-                        <Text style={styles.voteTitle}>名称</Text>
-                        <TextInput ref={'voteTitle'}
-                                   onLayout={this._inputOnLayout.bind(this)}
-                                   style={styles.voteInput}
-                                   value={this.state.foodBody.foodName}
-                                   underlineColorAndroid={'transparent'}
-                                   maxLength={32}
-                                   placeholder='请输入名称'
-                                   onChangeText={(text) => this._inputInvite(text, 'foodName')}/>
-                    </View>
-
                     <View style={[styles.voteGroup, {flexDirection: 'column', marginBottom: 10}]}
                           onStartShouldSetResponderCapture={this._onStartShouldSetResponderCapture.bind(this)}>
-                        <Text style={styles.voteTitle}>热量</Text>
+                        <Text style={styles.voteTitle}>步数</Text>
                         <TextInput ref={'voteTitle'}
                                    onLayout={this._inputOnLayout.bind(this)}
                                    style={styles.voteInput}
-                                   value={this.state.foodBody.num}
+                                   value={this.state.motionBody.stepNum}
                                    underlineColorAndroid={'transparent'}
                                    maxLength={32}
-                                   placeholder='请输入热量'
-                                   onChangeText={(text) => this._inputInvite(text, 'num')}/>
+                                   placeholder='请输入步数'
+                                   onChangeText={(text) => this._inputInvite(text, 'stepNum')}/>
                     </View>
                     <TouchableOpacity style={styles.btn} onPress={() => {
-                        this.submitFood((data)=>{
+                        this.submitMotion((data)=>{
                             if(data){
-                                DeviceEventEmitter.emit('foodAddPage');
+                                DeviceEventEmitter.emit('motionAddPage');
                                 this.props.navigation.goBack();
                             }
 
@@ -189,4 +172,3 @@ const styles = StyleSheet.create({
         marginBottom: 14,
     }
 });
-export default FoodPublish ;

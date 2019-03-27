@@ -17,39 +17,41 @@ export default class CheckPassword extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			password: '',
+			password: '123456',
             medicalHistory:'',
 		}
 	};
-    fetchHealth = (password,callback) => {
+    fetchHealth = (password) => {
         let url=Config.HEALTH_DETAil+"?token=lhy&userId="+Constant.user.id;
         let params={
         	password:password
 		}
-        FetchUtil.httpGet(url,params,callback);
+        FetchUtil.httpGet(url,params,(data)=>{
+            if(data){
+                this.setState({
+                    medicalHistory: data.medicalHistory
+                })
+            }else{
+                this.setState({
+                    medicalHistory: '查看失败'
+                })
+            }
+        });
     };
 	//组件渲染完毕时调用此方法
 	componentDidMount() {
-	};
+        this.checkPassword(123456);
+
+    };
 	componentWillUnmount() {
 	}
 //验证密码查询病情
 	checkPassword = (password) => {
-		if(password||password==''){
+		if(!password||password==''){
 			Alert.alert("请求输入6位数字密码")
 			return;
 		}
-        this.fetchHealth(password,(data)=>{
-        	if(data){
-                this.setState({
-                    medicalHistory: data.medicalHistory
-                })
-			}else{
-                this.setState({
-                    medicalHistory: '查看失败'
-                })
-			}
-		})
+        this.fetchHealth(password)
 
 
 	};
@@ -76,11 +78,11 @@ export default class CheckPassword extends Component {
 						placeholderTextColor={'#ccc'}
 						underlineColorAndroid="transparent"
 						onChangeText={(text) => this.setState({password:text})}
-						value={this.state.text}
+						value={this.state.password}
 					/>
 				</View>
 				<View>
-					<text>{this.state.medicalHistory}</text>
+					<Text>{this.state.medicalHistory}</Text>
 				</View>
                 <View style={{backgroundColor: '#fff', marginTop: 10, height: 48, marginBottom: 10}}>
                     <TouchableOpacity

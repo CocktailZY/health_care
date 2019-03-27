@@ -22,7 +22,7 @@ import  Constant from "../util/Constant";
 
 const {width, height} = Dimensions.get('window');
 
-class Food extends Component {
+export  default class Motion extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,13 +37,13 @@ class Food extends Component {
 
     componentDidMount() {
         //监听新建饮食，返回刷新列表
-        DeviceEventEmitter.addListener("foodAddPage",()=>{
-            this.fetchFood(1,(data) =>{
-                this.FoodListCallBack(data);
+        DeviceEventEmitter.addListener("motionAddPage",()=>{
+            this.fetchMotion(1,(data) =>{
+                this.MotionListCallBack(data);
             });
         })
-        this.fetchFood(1,(data) =>{
-            this.FoodListCallBack(data);
+        this.fetchMotion(1,(data) =>{
+            this.MotionListCallBack(data);
         });
     };
 
@@ -52,8 +52,8 @@ class Food extends Component {
     };
 
     //获取话题列表数据
-    fetchFood = (pageNum,callback) => {
-        let url = Config.GET_FOODS+"?token=lhy&userId="+Constant.user.id;
+    fetchMotion = (pageNum,callback) => {
+        let url = Config.MOTIONS+"?token=lhy&userId="+Constant.user.id;
         let params = {
             pageNum: pageNum,
             pageSize: Constant.pageSize
@@ -61,7 +61,7 @@ class Food extends Component {
         FetchUtil.httpGet(url ,params,callback);
     };
     //获取投票列表数据回调
-    FoodListCallBack= (res) => {
+    MotionListCallBack= (res) => {
         console.log(res);
         let dataArr = [];
         if (res.currentPage <= 1) {
@@ -95,8 +95,8 @@ class Food extends Component {
                             let tempNowPage = this.state.pageNum + 1;
                             this.setState({footLoading: true}, () => {
                                 //获取数据
-                                this.fetchFood(tempNowPage,(data) =>{
-                                    this.FoodListCallBack(data);
+                                this.fetchMotion(tempNowPage,(data) =>{
+                                    this.MotionListCallBack(data);
                                 });
                             });
                         }}
@@ -121,13 +121,10 @@ class Food extends Component {
         return (
                 <View style={[styles.flex1, {padding: 8}]}>
                     <View style={styles.itemTitleView}>
-                        <Text style={styles.itemTitleText} numberOfLines={1}>{item.foodName}</Text>
+                        <Text style={styles.itemTitleText} numberOfLines={1}>{`步数：${item.stepNum}`}</Text>
                     </View>
                     <View style={styles.bottomSeparator}></View>
                     <View style={{flexDirection: 'row'}}>
-                        <View style={{width: 80}}>
-                            <Text style={styles.itemBottomText} numberOfLines={1}>{`热量：${item.num}`}</Text>
-                        </View>
                         <View style={{width: 200}}>
                             <Text style={styles.itemBottomText} numberOfLines={1}>{`时间：${item.createTime}`}</Text>
                         </View>
@@ -150,13 +147,13 @@ class Food extends Component {
                             onPress={() => this.props.navigation.goBack()}
                         />
                     }
-                    centerComponent={{text: '饮食列表', style: {color: '#fff', fontSize: 18}}}
+                    centerComponent={{text: '运动列表', style: {color: '#fff', fontSize: 18}}}
                     rightComponent={
                         <Icon
                             name='plus'
                             type='font-awesome'
                             color='#ffffff'
-                            onPress={() => {this.props.navigation.navigate('FoodPublish')}}
+                            onPress={() => {this.props.navigation.navigate('MotionPublish')}}
                         />
                     }
                 />
@@ -174,8 +171,8 @@ class Food extends Component {
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     onRefresh={() => {
-                        this.fetchFood(1,(data) =>{
-                            this.FoodListCallBack(data);
+                        this.fetchMotion(1,(data) =>{
+                            this.MotionListCallBack(data);
                         });
                     }}
                     ListFooterComponent={() => this._renderFooter()}
@@ -184,9 +181,6 @@ class Food extends Component {
         )
     }
 }
-
-export default Food;
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

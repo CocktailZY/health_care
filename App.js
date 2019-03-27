@@ -10,14 +10,15 @@ import AllDoctor from './screens/AllDoctor';
 import SportManage from './screens/SportManage';
 import UserCenter from './screens/UserCenter';
 import CheckPassword from './screens/CheckPassword';
-<<<<<<< Updated upstream
 import RegisterDoctor from './screens/RegisterDoctor';
 import Medkit from './screens/Medkit';
-=======
 import Food from './screens/Food';
-import FoodPublish from './screens/FoodPublish ';
->>>>>>> Stashed changes
-
+import FoodPublish from './screens/FoodPublish';
+import Drugs from './screens/Drugs';
+import DrugsPublish from './screens/DrugsPublish';
+import DrugsDetail from './screens/DrugsDetail';
+import Motion from './screens/Motion';
+import MotionPublish from './screens/MotionPublish';
 const RootStack = createStackNavigator({
     Login: { screen: Login },
     Register: { screen: Register },
@@ -29,14 +30,16 @@ const RootStack = createStackNavigator({
     SportManage: { screen: SportManage },
     UserCenter: { screen: UserCenter },
     CheckPassword: { screen: CheckPassword },
-<<<<<<< Updated upstream
     RegisterDoctor: { screen: RegisterDoctor },
     Medkit: { screen: Medkit },
-=======
     FoodPublish : { screen: FoodPublish  },
     Food : { screen: Food  },
+    Drugs : { screen: Drugs  },
+    DrugsPublish : { screen: DrugsPublish  },
+    DrugsDetail : { screen: DrugsDetail  },
+    Motion : { screen: Motion  },
+    MotionPublish : { screen: MotionPublish  },
 
->>>>>>> Stashed changes
 }, {
     initialRouteName: 'Login', // 默认显示界面
     defaultNavigationOptions: {  // 屏幕导航的默认选项, 也可以在组件内用 static navigationOptions 设置(会覆盖此处的设置)
