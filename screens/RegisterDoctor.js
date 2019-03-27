@@ -40,7 +40,7 @@ export default class Register extends PureComponent {
     render() {
         return (
             <View style={{flex: 1, backgroundColor: '#eeeeee'}}>
-                <Image source={require('../images/login_poster.jpg')} style={{height:240}} />
+                <Image source={require('../images/login_poster.jpg')} style={{height:200}} />
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center',padding:10}}>
                     <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                         <Input
