@@ -9,6 +9,7 @@ import {
     Text,
     View,
     Image,
+    Button,
     ActivityIndicator,
     TouchableHighlight,
     DeviceEventEmitter,
@@ -120,13 +121,22 @@ class Topic extends Component {
                             name='arrow-left'
                             type='font-awesome'
                             color='#ffffff'
+                            onPress={() => this.props.navigation.goBack()}
+                        />
+                    }
+                    centerComponent={{text: '病史选择', style: {color: '#fff', fontSize: 18}}}
+                    rightComponent={
+                        <Text
+                            //name=''
+                            title={'确定'}
+                            type='font-awesome'
+                            color='#ffffff'
                             onPress={() => {
                                 Constant.bsList = this.state.choose;
                                 this.props.navigation.goBack();
                             }}
-                        />
+                        >确定</Text>
                     }
-                    centerComponent={{text: '病史选择', style: {color: '#fff', fontSize: 18}}}
                 />
                 <View style={{
                     flexDirection: 'row',

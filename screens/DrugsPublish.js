@@ -85,7 +85,7 @@ export  default  class DrugsPublish extends Component {
     };
 
     //提交饮食数据
-    submitFood = (callback) => {
+    submitFood = () => {
         let body = this.state.drugsBody;
         if (body.drugsName == '') {
             Alert.alert('药物名称不得为空');
@@ -106,7 +106,8 @@ export  default  class DrugsPublish extends Component {
             let url =Config.DRUGS_SAVE+"?token=ly&userId="+Constant.user.id;
             FetchUtil.httpGet(url,body,(data)=>{
                 if(data){
-                    this._serAlarm();
+                    DeviceEventEmitter.emit('drugsAddPage');
+                    this.props.navigation.goBack();
                 }
 
             });
@@ -123,12 +124,12 @@ export  default  class DrugsPublish extends Component {
             '',
             () => {
                 console.log("闹钟设置成功");
-                DeviceEventEmitter.emit('drugsAddPage');
-                this.props.navigation.goBack();
+                this.submitFood();
             },
             () => {
                 console.log("闹钟设置失败");
                 // Fail callback function
+                Alert.alert('请确保选择的开始时间大于当前时间');
             });
     };
 
@@ -282,7 +283,8 @@ export  default  class DrugsPublish extends Component {
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.btn} onPress={() => {
-                        this.submitFood();
+                        this._serAlarm();
+                        // this.submitFood();
                     }}>
                         <Text style={{fontSize: 15, color: '#fff'}}>添加</Text>
                     </TouchableOpacity>
