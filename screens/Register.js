@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, Image, Dimensions, Text, ScrollView, TouchableOpacity, TextInput, FlatList} from 'react-native';
+import {View, Image,Alert, Dimensions, Text, ScrollView, TouchableOpacity, TextInput, FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Button, Input, CheckBox, ListItem} from 'react-native-elements';
@@ -30,8 +30,15 @@ export default class Register extends PureComponent {
     //注册
     _register = (callback) => {
         let param = this.state;
-        console.log(param);
-        console.log(Constant.bsList);
+        if(Constant.bsList &&Constant.bsList.length>0){
+            let sick=''
+            for(let i=0;i<Constant.bsList.length;i++){
+                sick+='sick('+Constant.bsList[i].id+'),';
+            }
+            param['medicalHistory']=sick;
+        }else{
+            Alert.alert("请选择病史");
+        }
         let url = Config.REGISTER + "?token=lhy";
         FetchUtil.httpGet(url, param, callback);
     };
@@ -169,7 +176,7 @@ export default class Register extends PureComponent {
                             value={this.state.idCard}
                         />
                         <Input
-                            placeholder='病史密码'
+                            placeholder='病史密码,6位数字密码'
                             leftIcon={
                                 <Ionicons
                                     name='ios-lock'
@@ -186,7 +193,16 @@ export default class Register extends PureComponent {
                                 borderRadius: 2,
                                 marginBottom: 30
                             }}
-                            onChangeText={(text) => this.setState({"bsPwd": text})}
+                            onChangeText={(text) => {
+                                let reg=/^[1-9]\d*$/;
+                                var pattern=new RegExp(reg);
+                                if(pattern.test(text)&&text.length==6){
+                                    this.setState({"bsPwd": text})
+                                }else{
+                                    Alert.alert("该密码只能是6位数字");
+                                }
+
+                            }}
                             value={this.state.bsPwd}
                         />
                         <View style={{width: width * 0.8, alignItems: 'center', padding: 8}}>
@@ -206,7 +222,6 @@ export default class Register extends PureComponent {
                                 onPress={() => {
                                     this._register((data) => {
                                         //注册回调
-                                        console.log(data);
                                         if (data) {
                                             Constant['user'] = data;
                                             Constant.bsList = [];

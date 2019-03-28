@@ -60,11 +60,6 @@ class Topic extends Component {
         // this._topicAddPage.remove();
         console.log('1111111');
     };
-
-    //获取话题列表数据
-    fetchTopic = (pageNum, callback) => {
-
-    };
     //获取病史列表数据回调
     topicListCallBack = (res) => {
         console.log("++++++++++++病史+++++++++++");

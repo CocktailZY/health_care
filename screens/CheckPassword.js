@@ -13,6 +13,7 @@ import Config from "../util/Config";
 import Constant from "../util/Constant";
 import FetchUtil from "../util/FetchUtil";
 let lastPresTime = 1;
+const inputComponents = [];
 export default class CheckPassword extends Component {
 	constructor(props) {
 		super(props);
@@ -56,6 +57,9 @@ export default class CheckPassword extends Component {
 
 
 	};
+    _inputOnLayout(event) {
+        inputComponents.push(event.nativeEvent.target);
+    };
 	render() {
 		return (
 			<View style={styles.container}>
@@ -74,6 +78,7 @@ export default class CheckPassword extends Component {
 				<View style={styles.textInput}>
 					<TextInput
 						ref="Password"
+                        onLayout={this._inputOnLayout.bind(this)}
 						style={{flex: 1, color: 'black', padding: 0, marginLeft: 12}}
 						placeholder={'请输入6位数字加密密码'}
 						placeholderTextColor={'#ccc'}

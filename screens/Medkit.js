@@ -21,23 +21,27 @@ export default class Medkit extends PureComponent {
         }
     }
     componentDidMount() {
-        // let time=1553503205414+120000;
-        let time = Date.parse('Mon March 27 2019 22:47:00 GMT+0800 (GMT)').toString();
-        let time1 = Date.parse('Mon March 29 2019 07:27:00 GMT+0800 (GMT)').toString();
-        console.log(time);
-        RNAlarm.setAlarm(time,
-            'Meeting with customer',
-            time1,
-            '',
-            () => {
-                console.log("闹钟设置成功");
-                //http://www.cnblogs.com/mengdd/p/3819806.html
-                // Success callback function
-            },
-            () => {
-                console.log("闹钟设置失败");
-                // Fail callback function
-            });
+        // let time=1553503205414+60000;
+
+        let time = Date.parse('Mon March 28 2019 14:14:00 GMT+0800 (GMT)').toString();
+        let time1 = new Date().getTime()+60000+"";
+        console.log(time1);
+
+            RNAlarm.setAlarm(time1,
+                '吃药提醒',
+                time1,
+                '',
+                () => {
+                    console.log("闹钟设置成功");
+                    //http://www.cnblogs.com/mengdd/p/3819806.html
+                    // Success callback function
+                },
+                () => {
+                    console.log("闹钟设置失败");
+                    // Fail callback function
+                });
+
+
     }
     render() {
         return (
