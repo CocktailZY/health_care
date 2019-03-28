@@ -20,6 +20,7 @@ import DrugsDetail from './screens/DrugsDetail';
 import Motion from './screens/Motion';
 import MotionPublish from './screens/MotionPublish';
 import BsList from './screens/BsList';
+import Consult from './screens/Consult';
 
 const RootStack = createStackNavigator({
     Login: { screen: Login },
@@ -42,6 +43,7 @@ const RootStack = createStackNavigator({
     Motion : { screen: Motion  },
     MotionPublish : { screen: MotionPublish  },
     BsList : { screen: BsList  },
+    Consult : { screen: Consult  },
 
 }, {
     initialRouteName: 'Login', // 默认显示界面
