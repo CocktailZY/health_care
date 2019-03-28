@@ -3,7 +3,7 @@
  */
 import React, {PureComponent} from 'react';
 import {
-    Text, View, TouchableOpacity, Image, Dimensions, FlatList
+    Text, View, TouchableOpacity, Image, Dimensions, FlatList, TouchableHighlight
 } from 'react-native';
 import {Card, ListItem, Button, Icon, Header} from 'react-native-elements'
 
@@ -44,6 +44,12 @@ export default class AllDoctor extends PureComponent {
                     <Button
                         backgroundColor='#03A9F4'
                         buttonStyle={{borderRadius: 2, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                        onPress={() => {
+                            this.props.navigation.navigate('Consult', {
+                                userId: item.userId,//文章详情
+                                userName:item.user.userName
+                            });
+                        }}
                         title='点击咨询' />
                 </View>
             </Card>
