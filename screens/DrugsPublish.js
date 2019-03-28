@@ -12,7 +12,7 @@ import {
     DeviceEventEmitter,
     TouchableOpacity, Keyboard,
     ScrollView,
-     Alert
+    Alert
 } from 'react-native';
 import {Header, Icon} from 'react-native-elements';
 import FetchUtil from '../util/FetchUtil';
