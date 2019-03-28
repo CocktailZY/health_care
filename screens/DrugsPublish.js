@@ -57,8 +57,8 @@ export  default  class DrugsPublish extends Component {
     //处理TextInput失焦聚焦问题 end
 
     _inputInvite = (text, key) => {
-        console.log(11111111111111111111111111111111111111111111);
-        console.log(text);
+        // console.log(11111111111111111111111111111111111111111111);
+        // console.log(text);
         let body = this.state.drugsBody;
         if(key=="drugsNum"){
             let reg=/^[1-9]\d*$/;
@@ -67,8 +67,6 @@ export  default  class DrugsPublish extends Component {
                 body[key] = text;
                 this.setState({
                     drugsBody: body
-                }, () => {
-                    console.log(this.state.drugsBody)
                 });
             }else{
                 Alert.alert("请输入正整数");
@@ -77,8 +75,6 @@ export  default  class DrugsPublish extends Component {
             body[key] = text;
             this.setState({
                 drugsBody: body
-            }, () => {
-                console.log(this.state.drugsBody)
             });
         }
 
@@ -118,16 +114,20 @@ export  default  class DrugsPublish extends Component {
     _serAlarm = () => {
         let time = this.state.drugsBody.startTime+" "+this.state.drugsBody.drugsTime;//Date.parse('Mon March 27 2019 22:47:00 GMT+0800 (GMT)').toString();
         let time1 = this.state.drugsBody.endTime+" "+this.state.drugsBody.drugsTime;//Date.parse('Mon March 29 2019 07:27:00 GMT+0800 (GMT)').toString();
-        RNAlarm.setAlarm(new Date(time).getTime()+"",
+        // console.log(time);
+        // console.log(time1);
+        // console.log(Date.parse(new Date(time).toString()).toString());
+        // console.log(Date.parse(new Date(time1).toString()).toString());
+        RNAlarm.setAlarm(Date.parse(new Date(time).toString()).toString(),
             this.state.drugsBody.drugsName+':'+this.state.drugsBody.drugsNum,
-            new Date(time1).toString(),
+            Date.parse(new Date(time1).toString()).toString(),
             '',
             () => {
-                console.log("闹钟设置成功");
+                // console.log("闹钟设置成功");
                 this.submitFood();
             },
             () => {
-                console.log("闹钟设置失败");
+                // console.log("闹钟设置失败");
                 // Fail callback function
                 Alert.alert('请确保选择的开始时间大于当前时间');
             });
@@ -225,7 +225,8 @@ export  default  class DrugsPublish extends Component {
                                     if (action !== DatePickerAndroid.dismissedAction) {
                                         // 这里开始可以处理用户选好的年月日三个参数：year, month (0-11), day
                                         let tempBody = {...this.state.drugsBody};
-                                        tempBody.startTime = year+'-'+(month+1)+'-'+day;
+                                        let m = month+1;
+                                        tempBody.startTime = year+'-'+(m < 10 ? ('0'+m) : m)+'-'+(day < 10 ? ('0'+day) : day);
                                         this.setState({
                                             drugsBody: tempBody
                                         })
@@ -260,7 +261,8 @@ export  default  class DrugsPublish extends Component {
                                     if (action !== DatePickerAndroid.dismissedAction) {
                                         // 这里开始可以处理用户选好的年月日三个参数：year, month (0-11), day
                                         let tempBody = {...this.state.drugsBody};
-                                        tempBody.endTime = year+'-'+(month+1)+'-'+day;
+                                        let m = month+1;
+                                        tempBody.endTime = year+'-'+(m < 10 ? ('0'+m) : m)+'-'+(day < 10 ? ('0'+day) : day);
                                         this.setState({
                                             drugsBody: tempBody
                                         })

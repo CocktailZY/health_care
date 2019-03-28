@@ -134,10 +134,10 @@ export default class Drugs extends Component {
                     </View>
                     <View style={styles.bottomSeparator}></View>
                     <View style={{flexDirection: 'row'}}>
-                        <View style={{width: 80}}>
+                        <View style={{flex:1}}>
                             <Text style={styles.itemBottomText} numberOfLines={1}>{`数量：${item.drugsNum}`}</Text>
                         </View>
-                        <View style={{width: 80}}>
+                        <View style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}>
                             <Text style={styles.itemBottomText} numberOfLines={1}>{`时间：${item.drugsTime}`}</Text>
                         </View>
                     </View>
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     },
     itemTitleView: {flex: 1, flexDirection: 'row', alignItems: 'center'},
     itemTitleText: {fontSize: 18, fontWeight: 'bold', marginLeft: 5, width: (width - 30) * 0.9},
-    itemBottomText: {fontSize: 11, color: '#b5b5b5'},
+    itemBottomText: {fontSize: 13, color: '#b5b5b5'},
     footer: {
         flexDirection: 'row',
         height: 30,
