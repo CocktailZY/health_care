@@ -176,19 +176,15 @@ export default class Home extends PureComponent {
                             }} loop>
                         <View style={styles.slide}>
                             <Image resizeMode='stretch' style={styles.image}
-                                   source={require('../images/default_poster.jpg')}/>
+                                   source={require('../images/banner1.jpg')}/>
                         </View>
                         <View style={styles.slide}>
                             <Image resizeMode='stretch' style={styles.image}
-                                   source={require('../images/default_poster.jpg')}/>
+                                   source={require('../images/banner3.jpg')}/>
                         </View>
                         <View style={styles.slide}>
                             <Image resizeMode='stretch' style={styles.image}
-                                   source={require('../images/default_poster.jpg')}/>
-                        </View>
-                        <View style={styles.slide}>
-                            <Image resizeMode='stretch' style={styles.image}
-                                   source={require('../images/default_poster.jpg')}/>
+                                   source={require('../images/banner2.jpg')}/>
                         </View>
                     </Swiper>
                     {/*功能块*/}
