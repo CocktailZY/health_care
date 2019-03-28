@@ -23,7 +23,8 @@ export default class Consult extends Component {
             talkerName: Constant.user.userName,//说话者
             context: "",//说话内容
             hearerId:props.navigation.state.params.userId,//被说话者（听话者）
-            hearerName:props.navigation.state.params.userName,//被说话者（听话者）
+            hearerName:props.navigation.state.params.userName,//被说话者（听话者)
+            role:props.navigation.state.params.role,//被说话者（听话者的角色)
             pageStart:0,//开始条数
             pageEnd:0,//每页结束第几条
             count:0,//
@@ -101,7 +102,9 @@ _getCount(callback){
                         flexDirection: 'row',
                         alignItems: 'center'
                     }]}>
-                        <Text style={[styles.inviteTitle, {flex: 1}]}>{this.state.hearerName+" 医生"}</Text>
+                        <Text style={[styles.inviteTitle, {flex: 1}]}>{
+                            this.state.role=="otherUser" ?this.state.hearerName+" 患者":this.state.hearerName+" 医生"
+                        }</Text>
                     </View>
                     <View style={[styles.inviteBox, {flex: 1}]}>
                         {

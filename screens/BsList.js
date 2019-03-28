@@ -54,6 +54,19 @@ class Topic extends Component {
             ],
         })
     };
+    //获取病史数据
+    _getHistory(){
+        let url=Config.GET_HISTORY+"?token=lhy&userId="+Constant.user.Id;
+        if(this.state.searchText!=""){
+            let params={
+                sickName:this.state.searchText,
+            }
+            FetchUtil.httpGet(url,params,(data)=>{
+                this.topicListCallBack(data);
+            })
+        }
+
+    }
 
     componentWillUnmount() {
         // this._topicAddPage.remove();
@@ -66,7 +79,8 @@ class Topic extends Component {
     };
     //获取病史列表数据回调
     topicListCallBack = (res) => {
-
+        console.log("++++++++++++病史+++++++++++");
+        console.log(res);
     };
 
     _renderBsListItem = ({item, index}) => {
@@ -130,6 +144,7 @@ class Topic extends Component {
                         onSubmitEditing={this._toSearch}
                         onChangeText={(text) => {
                             this.setState({searchText: text})
+                            this._getHistory();
                         }}
                         underlineColorAndroid={'transparent'}
                     />

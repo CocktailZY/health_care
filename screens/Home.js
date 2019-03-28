@@ -257,7 +257,7 @@ export default class Home extends PureComponent {
 
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
                                 if (Constant.user.role == 'doctor') {
-                                    this.props.navigation.navigate('AllDoctor')//直接进入聊天页面
+                                    this.props.navigation.navigate('ChooseSuffer')//直接进入聊天页面
                                 } else {
                                     this.props.navigation.navigate('AllDoctor')
                                 }

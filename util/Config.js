@@ -18,5 +18,10 @@ export default Config={
     Drugs_DETAil:basePath+"/drugs/getDrugsById",//用药详情
     MOTIONS:basePath+"/motion/pageList",//获取运动列表
     MOTION_SAVE:basePath+"/motion/saveMotion",//保存运动
+    CHAT_COUNT:basePath+"/chat/getCount",//获取咨询总数
+    CHAT_HISTORY:basePath+"/chat/listChats",//获取咨询总数
+    CHATE_SAVE:basePath+"/chat/saveChat",//咨询或是回复
+    GET_USERS_BY_IDS:basePath+"/user/getUsersByIds",//咨询或是回复
+    GET_HISTORY:basePath+"/sick/listSicks",//查询病史
 
 };

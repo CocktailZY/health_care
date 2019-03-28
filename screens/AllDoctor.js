@@ -47,7 +47,8 @@ export default class AllDoctor extends PureComponent {
                         onPress={() => {
                             this.props.navigation.navigate('Consult', {
                                 userId: item.userId,//文章详情
-                                userName:item.user.userName
+                                userName:item.user.userName,
+                                role:item.user.role,
                             });
                         }}
                         title='点击咨询' />

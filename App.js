@@ -21,7 +21,7 @@ import Motion from './screens/Motion';
 import MotionPublish from './screens/MotionPublish';
 import BsList from './screens/BsList';
 import Consult from './screens/Consult';
-
+import ChooseSuffer from './screens/ChooseSuffer';
 const RootStack = createStackNavigator({
     Login: { screen: Login },
     Register: { screen: Register },
@@ -44,6 +44,7 @@ const RootStack = createStackNavigator({
     MotionPublish : { screen: MotionPublish  },
     BsList : { screen: BsList  },
     Consult : { screen: Consult  },
+    ChooseSuffer : { screen: ChooseSuffer  },
 
 }, {
     initialRouteName: 'Login', // 默认显示界面

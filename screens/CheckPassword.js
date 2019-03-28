@@ -17,7 +17,7 @@ export default class CheckPassword extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			password: '123456',
+			password: '',
             medicalHistory:'',
 		}
 	};
@@ -29,7 +29,8 @@ export default class CheckPassword extends Component {
         FetchUtil.httpGet(url,params,(data)=>{
             if(data){
                 this.setState({
-                    medicalHistory: data.medicalHistory
+                    medicalHistory: data.medicalHistory,
+                    password:''
                 })
             }else{
                 this.setState({
@@ -40,7 +41,7 @@ export default class CheckPassword extends Component {
     };
 	//组件渲染完毕时调用此方法
 	componentDidMount() {
-        this.checkPassword(123456);
+        // this.checkPassword(123456);
 
     };
 	componentWillUnmount() {

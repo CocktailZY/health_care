@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+    Image,
   FlatList,
 } from "react-native";
 import { Header, Icon } from "react-native-elements";
@@ -20,18 +21,30 @@ export default class ChooseSuffer extends Component {
   }
 
   componentDidMount() {
-    // this._fetchSuffer();
+    this._fetchSuffer();
   }
 
-  _fetchSuffer = () => {};
+  _fetchSuffer = () => {
+      let url=Config.GET_USERS_BY_IDS+"?token=lhy&userId="+Constant.user.id;
+      FetchUtil.httpGet(url,{hearerId:Constant.user.id},(data)=>{
+        if(data){
+            this.setState({
+                suffersList:data
+            })
+        }
+      });
+  };
 
   _suffersItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         key={index}
         onPress={() => {
-          console.log("点击某人");
-          //跳转问诊页
+            this.props.navigation.navigate('Consult', {
+                userId: item.id,//文章详情
+                userName:item.userName,
+                role:item.role
+            });
         }}
       >
         <View style={{ flex: 1 }}>
@@ -41,9 +54,8 @@ export default class ChooseSuffer extends Component {
             resizeMode={"stretch"}
             resizeMethod={"scale"}
           />
-          <Text>{`姓名：${item.name}`}</Text>
-          <Text>{`性别：${item.sex}`}</Text>
-          <Text>{`年龄：${item.age}`}</Text>
+          <Text>{`姓名：${item.userName}`}</Text>
+          <Text>{`角色：患者`}</Text>
         </View>
       </TouchableOpacity>
     );
