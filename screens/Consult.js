@@ -21,11 +21,12 @@ export default class Consult extends Component {
             commentList:[] ,
             talkerId: Constant.user.id,//说话者
             talkerName: Constant.user.userName,//说话者
+            talkerRole:Constant.user.role,//说话者角色
             context: "",//说话内容
             hearerId:props.navigation.state.params.userId,//被说话者（听话者）
             hearerName:props.navigation.state.params.userName,//被说话者（听话者)
-            role:props.navigation.state.params.role,//被说话者（听话者的角色)
-            pageStart:0,//开始条数
+            hearerRole:props.navigation.state.params.role,//被说话者（听话者的角色)
+            pageStart:0,//开始R条数
             pageEnd:0,//每页结束第几条
             count:0,//
             commentPid: Constant.user.id,
@@ -103,7 +104,7 @@ _getCount(callback){
                         alignItems: 'center'
                     }]}>
                         <Text style={[styles.inviteTitle, {flex: 1}]}>{
-                            this.state.role=="otherUser" ?this.state.hearerName+" 患者":this.state.hearerName+" 医生"
+                            this.state.hearerRole=="otherUser" ?this.state.hearerName+" 患者":this.state.hearerName+" 医生"
                         }</Text>
                     </View>
                     <View style={[styles.inviteBox, {flex: 1}]}>
@@ -112,7 +113,7 @@ _getCount(callback){
                                 return <View key={index}
                                              style={[styles.inviteGroup, index == 0 ? {borderTopColor: 'transparent'} : null]}>
                                     <Image
-                                        source={require('../images/head.jpg')}
+                                        source={(item.talkerRole=='doctor') ? require('../images/doctor_head.png'):require('../images/user_head.png')}
                                         style={styles.inviteHeadImg}/>
                                     <View style={{flex: 1, marginLeft: 10}}>
                                         <View style={{flexDirection: 'row', paddingLeft: 6}}>
@@ -169,8 +170,10 @@ _getCount(callback){
             context: this.state.inviteContent,
             talkerId: this.state.talkerId,//说话者
             talkerName:this.state.talkerName,//说话者
+            talkerRole:this.state.talkerRole,//说话者
             hearerId:this.state.hearerId,//被说话者（听话者）
             hearerName:this.state.hearerName,//被说话者（听话者）
+            hearerRole:this.state.hearerRole,//被说话者（听话者）
 
         };
         if (this.state.inviteContent == '' ||this.state.inviteContent == null) {

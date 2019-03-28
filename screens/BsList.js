@@ -41,22 +41,10 @@ class Topic extends Component {
     };
 
     componentDidMount() {
-        this.setState({
-            bsList:[
-                {id:false},
-                {id:false},
-                {id:false},
-                {id:false},
-                {id:false},
-                {id:false},
-                {id:true},
-                {id:false}
-            ],
-        })
     };
     //获取病史数据
     _getHistory(){
-        let url=Config.GET_HISTORY+"?token=lhy&userId="+Constant.user.Id;
+        let url=Config.GET_HISTORY+"?token=lhy&userId=";
         if(this.state.searchText!=""){
             let params={
                 sickName:this.state.searchText,
@@ -80,14 +68,17 @@ class Topic extends Component {
     //获取病史列表数据回调
     topicListCallBack = (res) => {
         console.log("++++++++++++病史+++++++++++");
-        console.log(res);
+        this.setState({
+            bsList:res,
+        })
+
     };
 
     _renderBsListItem = ({item, index}) => {
         return (
             <CheckBox
                 left
-                title='Click Here'
+                title={item.sickName}
                 checkedIcon='dot-circle-o'
                 uncheckedIcon='circle-o'
                 size={18}
