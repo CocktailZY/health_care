@@ -103,7 +103,7 @@ class TopicDetail extends Component {
                                 return <View key={index}
                                              style={[styles.inviteGroup, index == 0 ? {borderTopColor: 'transparent'} : null]}>
                                     <Image
-                                        source={require('../images/head.jpg')}
+                                        source={require('../images/user_head.png')}
                                         style={styles.inviteHeadImg}/>
                                     <View style={{flex: 1, marginLeft: 10}}>
                                         <View style={{flexDirection: 'row', paddingLeft: 6}}>

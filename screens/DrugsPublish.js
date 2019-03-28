@@ -111,10 +111,10 @@ export  default  class DrugsPublish extends Component {
 
     //设置闹钟
     _serAlarm = () => {
-        let time = this.state.drugsBody.startTime;//Date.parse('Mon March 27 2019 22:47:00 GMT+0800 (GMT)').toString();
+        let time = this.state.drugsBody.startTime+" "+this.state.drugsBody.drugsTime;//Date.parse('Mon March 27 2019 22:47:00 GMT+0800 (GMT)').toString();
         let time1 = this.state.drugsBody.endTime;//Date.parse('Mon March 29 2019 07:27:00 GMT+0800 (GMT)').toString();
         console.log(time);
-        RNAlarm.setAlarm(time,
+        RNAlarm.setAlarm(new Date(time).toString(),
             this.state.drugsBody.drugsName+':'+this.state.drugsBody.drugsNum,
             time1,
             '',

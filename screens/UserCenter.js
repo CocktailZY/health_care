@@ -53,6 +53,7 @@ export default class Setting extends Component {
 
 //推出登陆，直接退出，不用调请求
     _logout = () => {
+        Constant.user={};
         this.props.navigation.dispatch(StackActions.reset({
             index: 0,
             actions: [

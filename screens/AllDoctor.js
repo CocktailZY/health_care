@@ -36,7 +36,7 @@ export default class AllDoctor extends PureComponent {
                     <Image
                         style={{height:240}}
                         resizeMode="cover"
-                        source={require('../images/default_poster.jpg')}
+                        source={require('../images/yisheng.jpg')}
                     />
                     <Text style={{marginBottom: 10,marginTop:10,fontSize: 16}}>
                         {item.hospital}
