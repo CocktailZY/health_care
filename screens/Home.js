@@ -141,8 +141,8 @@ export default class Home extends PureComponent {
         return (
             <View>
                 <View style={{flexDirection: 'row'}}>
-                    <View>
-                        <Image source={require('../images/yisheng.jpg')} style={{width: 70, height: 100}}
+                    <View style={{justifyContent:'center',alignItems:'center'}}>
+                        <Image source={require('../images/doctor_h.png')} style={{width: 70, height: 70}}
                                resizeMode={'stretch'} resizeMethod={'scale'}/>
                     </View>
                     <View style={{flex: 1, paddingLeft: 10}}>

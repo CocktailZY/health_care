@@ -32,12 +32,13 @@ export default class AllDoctor extends PureComponent {
     _renderDoctors = ({item, index}) => {
         return (
             <Card title={item.user.userName} key={item.userId}>
-                <View style={{flex:1}}>
-                    <Image
-                        style={{height:240}}
-                        resizeMode="cover"
-                        source={require('../images/yisheng.jpg')}
-                    />
+                <View style={{flex:1,justifyContent:'center'}}>
+                    <View style={{justifyContent:'center',alignItems:'center'}}>
+                        <Image
+                            style={{height:80,width:80}}
+                            source={require('../images/doctor_h.png')}
+                        />
+                    </View>
                     <Text style={{marginBottom: 10,marginTop:10,fontSize: 16}}>
                         {item.hospital}
                     </Text>
