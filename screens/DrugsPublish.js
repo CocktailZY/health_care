@@ -117,9 +117,7 @@ export  default  class DrugsPublish extends Component {
     _serAlarm = () => {
         let time = this.state.drugsBody.startTime+" "+this.state.drugsBody.drugsTime;//Date.parse('Mon March 27 2019 22:47:00 GMT+0800 (GMT)').toString();
         let time1 = this.state.drugsBody.endTime+" "+this.state.drugsBody.drugsTime;//Date.parse('Mon March 29 2019 07:27:00 GMT+0800 (GMT)').toString();
-        console.log(time);
-        console.log(new Date(time).toString());
-        RNAlarm.setAlarm(new Date(time).toString(),
+        RNAlarm.setAlarm(new Date(time).getTime()+"",
             this.state.drugsBody.drugsName+':'+this.state.drugsBody.drugsNum,
             new Date(time1).toString(),
             '',
