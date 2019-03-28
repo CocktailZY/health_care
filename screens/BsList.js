@@ -68,8 +68,18 @@ class Topic extends Component {
     //获取病史列表数据回调
     topicListCallBack = (res) => {
         console.log("++++++++++++病史+++++++++++");
+        Constant.bsList.map((his,index)=>{
+            res.map((item,index)=>{
+                if(his.id === item.id){
+                    item['checked'] = true;
+                }else{
+                    item['checked'] = false;
+                }
+            })
+        })
+        
         this.setState({
-            bsList:res,
+            bsList:res
         })
 
     };
@@ -77,21 +87,32 @@ class Topic extends Component {
     _renderBsListItem = ({item, index}) => {
         return (
             <CheckBox
+                key={item.id}
                 left
                 title={item.sickName}
                 checkedIcon='dot-circle-o'
                 uncheckedIcon='circle-o'
                 size={18}
-                checked={item.id}
+                checked={item.checked}
                 onPress={()=>{
                     console.log(item.id);
+                    let tempArr = [...this.state.bsList];
+                    let tempChoose = [];
+                    tempArr.map((obj,index)=>{
+                        if(obj.id === item.id){
+                            obj.checked = !obj.checked;
+                        }
+                        if(obj.checked){
+                            tempChoose.push(obj);
+                        }
+                    })
+                    this.setState({
+                        bsList: tempArr,
+                        choose: tempChoose
+                    })
                 }}
             />
         )
-    };
-
-    _toSearch = () => {
-        console.log(this.state.searchText);
     };
 
     render() {
@@ -104,7 +125,10 @@ class Topic extends Component {
                             name='arrow-left'
                             type='font-awesome'
                             color='#ffffff'
-                            onPress={() => this.props.navigation.goBack()}
+                            onPress={() => {
+                                Constant.bsList = this.state.choose;
+                                this.props.navigation.goBack();
+                            }}
                         />
                     }
                     centerComponent={{text: '病史选择', style: {color: '#fff', fontSize: 18}}}
@@ -132,22 +156,25 @@ class Topic extends Component {
                         }}
                         placeholderTextColor={'#CCCCCC'}
                         placeholder={'搜索...'}
-                        onSubmitEditing={this._toSearch}
+                        autoFocus={true}
+                        returnKeyType={"search"}
+                        onSubmitEditing={()=>{this._getHistory()}}
                         onChangeText={(text) => {
                             this.setState({searchText: text})
-                            this._getHistory();
                         }}
                         underlineColorAndroid={'transparent'}
+                        value={this.state.searchText}
                     />
                     <View style={{width: 25, height: 30, justifyContent: 'center'}}>
                         <Ionicons name={'ios-search'} size={25} color={'#CCCCCC'} onPress={() => {
-                            this._toSearch()
+                            this._getHistory()
                         }}/>
                     </View>
                 </View>
                 <FlatList
                     data={this.state.bsList}
                     renderItem={this._renderBsListItem}
+                    keyExtractor={(item, index) => String(index)}
                     ListEmptyComponent={() => <View
                         style={{height: 100, justifyContent: 'center', alignItems: 'center'}}>
                         <Text style={{fontSize: 16, color: '#999'}}>暂无数据</Text>

@@ -31,6 +31,7 @@ export default class Register extends PureComponent {
     _register = (callback) => {
         let param = this.state;
         console.log(param);
+        console.log(Constant.bsList);
         let url = Config.REGISTER + "?token=lhy";
         FetchUtil.httpGet(url, param, callback);
     };
@@ -208,6 +209,7 @@ export default class Register extends PureComponent {
                                         console.log(data);
                                         if (data) {
                                             Constant['user'] = data;
+                                            Constant.bsList = [];
                                             this.props.navigation.navigate('Home');
                                         }
                                     })
