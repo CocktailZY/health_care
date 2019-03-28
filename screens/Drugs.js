@@ -137,8 +137,8 @@ export default class Drugs extends Component {
                         <View style={{width: 80}}>
                             <Text style={styles.itemBottomText} numberOfLines={1}>{`数量：${item.drugsNum}`}</Text>
                         </View>
-                        <View style={{width: 20}}>
-                            <Text style={styles.itemBottomText} numberOfLines={1}>{`时间：${item.createTime}`}</Text>
+                        <View style={{width: 80}}>
+                            <Text style={styles.itemBottomText} numberOfLines={1}>{`时间：${item.drugsTime}`}</Text>
                         </View>
                     </View>
                 </View>
