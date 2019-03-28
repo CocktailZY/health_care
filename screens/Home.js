@@ -142,7 +142,7 @@ export default class Home extends PureComponent {
             <View>
                 <View style={{flexDirection: 'row'}}>
                     <View>
-                        <Image source={require('../images/default_poster.jpg')} style={{width: 70, height: 100}}
+                        <Image source={require('../images/yisheng.jpg')} style={{width: 70, height: 100}}
                                resizeMode={'stretch'} resizeMethod={'scale'}/>
                     </View>
                     <View style={{flex: 1, paddingLeft: 10}}>

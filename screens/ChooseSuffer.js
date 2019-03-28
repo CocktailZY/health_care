@@ -49,7 +49,7 @@ export default class ChooseSuffer extends Component {
       >
         <View style={{ flex: 1 }}>
           <Image
-            source={require("../images/default_poster.jpg")}
+            source={require("../images/huanzhe.jpg")}
             style={{ width: 80, height: 100 }}
             resizeMode={"stretch"}
             resizeMethod={"scale"}
