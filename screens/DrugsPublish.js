@@ -12,7 +12,9 @@ import {
     DeviceEventEmitter,
     TouchableOpacity, Keyboard,
     ScrollView,
-    Alert
+    Alert,
+    DatePickerAndroid,
+    TimePickerAndroid
 } from 'react-native';
 import {Header, Icon} from 'react-native-elements';
 import FetchUtil from '../util/FetchUtil';
@@ -177,38 +179,103 @@ export  default  class DrugsPublish extends Component {
                     <View style={[styles.voteGroup, {borderTopColor: 'transparent'}]}
                           onStartShouldSetResponderCapture={this._onStartShouldSetResponderCapture.bind(this)}>
                         <Text style={styles.voteTitle}>用药时间</Text>
-                        <TextInput ref={'voteTitle'}
+                        <TouchableOpacity style={{flex: 1}} onPress={()=>{
+                           try {
+                            const {action, hour, minute} = TimePickerAndroid.open({
+                              hour: new Date().getHours,
+                              minute: new Date().getMinutes,
+                              is24Hour: true, // Will display '2 PM'
+                            });
+                            if (action !== TimePickerAndroid.dismissedAction) {
+                              // Selected hour (0-23), minute (0-59)
+                                  let tempBody = {...this.state.drugsBody};
+                                  tempBody.drugsTime = (hour < 10 ? ('0'+hour) : hour)+':'+(minute < 10 ? ('0'+minute) : minute);
+                                  this.setState({
+                                    drugsBody: tempBody
+                                  })
+                                }
+                              } catch ({code, message}) {
+                                console.warn('Cannot open time  picker', message);
+                              }
+                        }}>
+                            <TextInput ref={'voteTitle'}
                                    onLayout={this._inputOnLayout.bind(this)}
                                    style={styles.voteInput}
                                    value={this.state.drugsBody.drugsTime}
                                    underlineColorAndroid={'transparent'}
                                    maxLength={32}
+                                   editable={false}
                                    placeholder='请输入用药时间'
                                    onChangeText={(text) => this._inputInvite(text, 'drugsTime')}/>
+                        </TouchableOpacity>
                     </View>
                     <View style={[styles.voteGroup, {borderTopColor: 'transparent'}]}
                           onStartShouldSetResponderCapture={this._onStartShouldSetResponderCapture.bind(this)}>
                         <Text style={styles.voteTitle}>开始日期</Text>
-                        <TextInput ref={'voteTitle'}
-                                   onLayout={this._inputOnLayout.bind(this)}
-                                   style={styles.voteInput}
-                                   value={this.state.drugsBody.startTime}
-                                   underlineColorAndroid={'transparent'}
-                                   maxLength={32}
-                                   placeholder='请输入开始日期'
-                                   onChangeText={(text) => this._inputInvite(text, 'startTime')}/>
+                        <TouchableOpacity style={{flex: 1}} onPress={()=>{
+                            try {
+                                const {action, year, month, day} = DatePickerAndroid.open({
+                                  // 要设置默认值为今天的话，使用`new Date()`即可。
+                                  // 下面显示的会是2020年5月25日。月份是从0开始算的。
+                                //   date: new Date(2020, 4, 25)
+                                    date:new Date()
+                                });
+                                if (action !== DatePickerAndroid.dismissedAction) {
+                                  // 这里开始可以处理用户选好的年月日三个参数：year, month (0-11), day
+                                  let tempBody = {...this.state.drugsBody};
+                                  tempBody.startTime = year+'-'+(month+1)+'-'+day;
+                                  this.setState({
+                                    drugsBody: tempBody
+                                  })
+                                }
+                              } catch ({code, message}) {
+                                console.warn('Cannot open date picker', message);
+                              }
+                        }}>
+                            <TextInput ref={'voteTitle'}
+                                    onLayout={this._inputOnLayout.bind(this)}
+                                    style={styles.voteInput}
+                                    value={this.state.drugsBody.startTime}
+                                    underlineColorAndroid={'transparent'}
+                                    maxLength={32}
+                                    placeholder='请输入开始日期'
+                                    editable={false}
+                                    onChangeText={(text) => this._inputInvite(text, 'startTime')}/>
+                        </TouchableOpacity>
                     </View>
                     <View style={[styles.voteGroup, {borderTopColor: 'transparent'}]}
                           onStartShouldSetResponderCapture={this._onStartShouldSetResponderCapture.bind(this)}>
                         <Text style={styles.voteTitle}>结束日期</Text>
-                        <TextInput ref={'voteTitle'}
-                                   onLayout={this._inputOnLayout.bind(this)}
-                                   style={styles.voteInput}
-                                   value={this.state.drugsBody.endTime}
-                                   underlineColorAndroid={'transparent'}
-                                   maxLength={32}
-                                   placeholder='请输入结束日期'
-                                   onChangeText={(text) => this._inputInvite(text, 'endTime')}/>
+                        <TouchableOpacity style={{flex: 1}} onPress={()=>{
+                            try {
+                                const {action, year, month, day} = DatePickerAndroid.open({
+                                  // 要设置默认值为今天的话，使用`new Date()`即可。
+                                  // 下面显示的会是2020年5月25日。月份是从0开始算的。
+                                //   date: new Date(2020, 4, 25)
+                                    date:new Date()
+                                });
+                                if (action !== DatePickerAndroid.dismissedAction) {
+                                  // 这里开始可以处理用户选好的年月日三个参数：year, month (0-11), day
+                                  let tempBody = {...this.state.drugsBody};
+                                  tempBody.endTime = year+'-'+(month+1)+'-'+day;
+                                  this.setState({
+                                    drugsBody: tempBody
+                                  })
+                                }
+                              } catch ({code, message}) {
+                                console.warn('Cannot open date picker', message);
+                              }
+                        }}>
+                            <TextInput ref={'voteTitle'}
+                                    onLayout={this._inputOnLayout.bind(this)}
+                                    style={styles.voteInput}
+                                    value={this.state.drugsBody.endTime}
+                                    underlineColorAndroid={'transparent'}
+                                    maxLength={32}
+                                    editable={false}
+                                    placeholder='请输入结束日期'
+                                    onChangeText={(text) => this._inputInvite(text, 'endTime')}/>
+                        </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.btn} onPress={() => {
                         this.submitFood();

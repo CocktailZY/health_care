@@ -230,8 +230,8 @@ export default class Home extends PureComponent {
                         </View>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-around'}}>
                             <TouchableOpacity style={{flex: 1}} onPress={() => {
-                                // this.props.navigation.navigate('Drugs')
-                                this.props.navigation.navigate('Medkit');
+                                this.props.navigation.navigate('Drugs')
+                                // this.props.navigation.navigate('Medkit');
                             }}>
                                 <View
                                     style={{
