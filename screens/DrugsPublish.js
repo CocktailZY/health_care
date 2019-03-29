@@ -35,7 +35,6 @@ export  default  class DrugsPublish extends Component {
                 drugsTime: '',
                 startTime: '',
                 endTime: '',
-
             },
         }
     };
@@ -60,8 +59,8 @@ export  default  class DrugsPublish extends Component {
     //处理TextInput失焦聚焦问题 end
 
     _inputInvite = (text, key) => {
-        console.log(11111111111111111111111111111111111111111111);
-        console.log(text);
+        // console.log(11111111111111111111111111111111111111111111);
+        // console.log(text);
         let body = this.state.drugsBody;
         if(key=="drugsNum"){
             let reg=/^[1-9]\d*$/;
@@ -70,8 +69,6 @@ export  default  class DrugsPublish extends Component {
                 body[key] = text;
                 this.setState({
                     drugsBody: body
-                }, () => {
-                    console.log(this.state.drugsBody)
                 });
             }else{
                 Alert.alert("请输入正整数");
@@ -80,8 +77,6 @@ export  default  class DrugsPublish extends Component {
             body[key] = text;
             this.setState({
                 drugsBody: body
-            }, () => {
-                console.log(this.state.drugsBody)
             });
         }
 
@@ -241,7 +236,8 @@ export  default  class DrugsPublish extends Component {
                                     if (action !== DatePickerAndroid.dismissedAction) {
                                         // 这里开始可以处理用户选好的年月日三个参数：year, month (0-11), day
                                         let tempBody = {...this.state.drugsBody};
-                                        tempBody.startTime = year+'-'+(month+1)+'-'+day;
+                                        let m = month+1;
+                                        tempBody.startTime = year+'-'+(m < 10 ? ('0'+m) : m)+'-'+(day < 10 ? ('0'+day) : day);
                                         this.setState({
                                             drugsBody: tempBody
                                         })
@@ -276,7 +272,8 @@ export  default  class DrugsPublish extends Component {
                                     if (action !== DatePickerAndroid.dismissedAction) {
                                         // 这里开始可以处理用户选好的年月日三个参数：year, month (0-11), day
                                         let tempBody = {...this.state.drugsBody};
-                                        tempBody.endTime = year+'-'+(month+1)+'-'+day;
+                                        let m = month+1;
+                                        tempBody.endTime = year+'-'+(m < 10 ? ('0'+m) : m)+'-'+(day < 10 ? ('0'+day) : day);
                                         this.setState({
                                             drugsBody: tempBody
                                         })
