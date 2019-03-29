@@ -27,12 +27,15 @@ export  default  class DrugsPublish extends Component {
         super(props);
 
         this.state = {
+            hour: 0,
+            minute: 0,
             drugsBody: {
                 drugsName: '',
                 drugsNum: '',
                 drugsTime: '',
                 startTime: '',
                 endTime: '',
+
             },
         }
     };
@@ -113,24 +116,36 @@ export  default  class DrugsPublish extends Component {
             });
         }
     };
-
+    /**
+     *时间字符串时间戳字符串
+     */
+    strToStemp(time){
+        time = time.replace(/-/g,':').replace(' ',':');
+        time = time.split(':');
+        return new Date(time[0],(time[1]-1),time[2],time[3],time[4],time[5]?time[5]:"00").getTime();
+    }
     //设置闹钟
     _serAlarm = () => {
-        let time = this.state.drugsBody.startTime+" "+this.state.drugsBody.drugsTime;//Date.parse('Mon March 27 2019 22:47:00 GMT+0800 (GMT)').toString();
-        let time1 = this.state.drugsBody.endTime+" "+this.state.drugsBody.drugsTime;//Date.parse('Mon March 29 2019 07:27:00 GMT+0800 (GMT)').toString();
-        RNAlarm.setAlarm(new Date(time).getTime()+"",
-            this.state.drugsBody.drugsName+':'+this.state.drugsBody.drugsNum,
-            new Date(time1).toString(),
-            '',
-            () => {
-                console.log("闹钟设置成功");
-                this.submitFood();
-            },
-            () => {
-                console.log("闹钟设置失败");
-                // Fail callback function
-                Alert.alert('请确保选择的开始时间大于当前时间');
-            });
+        let time = this.state.drugsBody.startTime+" "+this.state.drugsBody.drugsTime+":00";//Date.parse('Mon March 27 2019 22:47:00 GMT+0800 (GMT)').toString();
+        let t=this.strToStemp(time);
+        if(t>new Date().getTime()){
+            RNAlarm.setAlarm(t+'',
+                this.state.drugsBody.drugsName+':'+this.state.drugsBody.drugsNum,
+                '5',
+                '',
+                () => {
+                    console.log("闹钟设置成功");
+                    this.submitFood();
+                },
+                () => {
+                    console.log("闹钟设置失败");
+                    // Fail callback function
+                    Alert.alert('请确保选择的开始时间大于当前时间');
+                });
+        }else{
+            Alert.alert('请重新选择时间和开始日期');
+        }
+
     };
 
     render() {
@@ -189,6 +204,7 @@ export  default  class DrugsPublish extends Component {
                               is24Hour: true, // Will display '2 PM'
                             }).then(({action, hour, minute})=>{
                                  if (action !== TimePickerAndroid.dismissedAction) {
+                                     this.setState({hour:hour,minute:minute});
                                      let tempBody = {...this.state.drugsBody};
                                      tempBody.drugsTime = (hour < 10 ? ('0'+hour) : hour)+':'+(minute < 10 ? ('0'+minute) : minute);
                                      this.setState({
