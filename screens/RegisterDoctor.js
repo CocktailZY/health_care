@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, Image, Dimensions, Text, ScrollView} from 'react-native';
+import {View, Image, Dimensions, Text, ScrollView, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Button, Input} from 'react-native-elements';
@@ -28,9 +28,78 @@ export default class Register extends PureComponent {
     componentDidMount() {
         // this.fetchIndexArtical(1);
     };
-
+    _alertText(text,callback) {
+        Alert.alert(
+            '提醒',
+            text,
+            [
+                {
+                    text: '确定',
+                    onPress: () => {
+                        callback;
+                    }
+                }
+            ],{ cancelable: false }
+        )
+    }
     //注册
     _register = (callback) => {
+        if (this.state.userCode  == "" ) {
+            this._alertText('用户名不能为空',()=>{
+                // this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.password == "" ) {
+            this._alertText('密码不能为空',()=>{
+                this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.password1 == "" ) {
+            this._alertText('确认密码不能为空',()=>{
+                this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.password1 !== this.state.password ) {
+            this._alertText('两次密码不一致',()=>{
+
+            })
+            return;
+        }
+        if (this.state.userName =="" ) {
+            this._alertText('姓名不能为空',()=>{
+                //this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.idCard =="" ) {
+            this._alertText('身份证不能为空',()=>{
+                //this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.hospital =="" ) {
+            this._alertText('医院不能为空',()=>{
+                //this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.offices =="" ) {
+            this._alertText('科室不能为空',()=>{
+                //this.setState({"password1": ""});
+            })
+            return;
+        }
+
+        if (this.state.certificateNo =="" ) {
+            this._alertText('证件号不能为空',()=>{
+                //this.setState({"password1": ""});
+            })
+            return;
+        }
+
         let param =this.state;
         console.log(param);
         let url = Config.REGISTER+"?token=lhy";
@@ -107,11 +176,7 @@ export default class Register extends PureComponent {
                                 marginBottom: 30
                             }}
                             onChangeText={(text)=>{
-                                if(this.state.password !=""&& text === this.state.password){
-                                    this.setState({"password1":text})
-                                }else{
-                                    Alert.alert('提示', "密码不一致，请重新输入");
-                                }
+                                    this.setState({"password1":text});
                             }}
                             value={this.state.password1}
                         />

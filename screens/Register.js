@@ -27,8 +27,73 @@ export default class Register extends PureComponent {
         // this.fetchIndexArtical(1);
     };
 
+    _alertText(text,callback) {
+        Alert.alert(
+            '提醒',
+            text,
+            [
+                {
+                    text: '确定',
+                    onPress: () => {
+                        callback;
+                    }
+                }
+            ],{ cancelable: false }
+        )
+    }
     //注册
     _register = (callback) => {
+        if (this.state.userCode  == "" ) {
+            this._alertText('用户名不能为空',()=>{
+               // this.setState({"password1": ""});
+            })
+             return;
+        }
+        if (this.state.password == "" ) {
+            this._alertText('密码不能为空',()=>{
+                this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.password1 == "" ) {
+            this._alertText('确认密码不能为空',()=>{
+                this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.password1 !== this.state.password ) {
+            this._alertText('两次密码不一致',()=>{
+
+            })
+            return;
+        }
+        if (this.state.userName =="" ) {
+            this._alertText('姓名不能为空',()=>{
+                //this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.idCard =="" ) {
+            this._alertText('身份证不能为空',()=>{
+                //this.setState({"password1": ""});
+            })
+            return;
+        }
+        if (this.state.bsPwd =="" ) {
+            this._alertText('病史密码不能为空',()=>{
+                //this.setState({"password1": ""});
+            })
+            return;
+        }
+        let reg=/^[1-9]\d*$/;
+        let pattern=new RegExp(reg);
+        if(pattern.test(this.state.bsPwd)&&this.state.bsPwd.length>=6){
+
+        }else{
+            this._alertText('病史密码为6位数字',()=>{
+            }) ;
+            return;
+        }
         let param = this.state;
         if(Constant.bsList &&Constant.bsList.length>0){
             let sick=''
@@ -125,11 +190,7 @@ export default class Register extends PureComponent {
                                 marginBottom: 30
                             }}
                             onChangeText={(text) => {
-                                if (this.state.password != "" && text === this.state.password) {
                                     this.setState({"password1": text})
-                                } else {
-                                    Alert.alert('提示', "密码不一致，请重新输入");
-                                }
                             }}
                             value={this.state.password1}
                         />
@@ -194,14 +255,7 @@ export default class Register extends PureComponent {
                                 marginBottom: 30
                             }}
                             onChangeText={(text) => {
-                                let reg=/^[1-9]\d*$/;
-                                var pattern=new RegExp(reg);
-                                if(pattern.test(text)&&text.length==6){
                                     this.setState({"bsPwd": text})
-                                }else{
-                                    Alert.alert("该密码只能是6位数字");
-                                }
-
                             }}
                             value={this.state.bsPwd}
                         />
