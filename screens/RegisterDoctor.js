@@ -300,6 +300,8 @@ export default class Register extends PureComponent {
                                         if(data){
                                             Constant['user']=data;
                                             this.props.navigation.navigate('Home');
+                                        }else{
+                                            Alert.alert("注册失败,请确保用户和身份证唯一");
                                         }
 
                                     })
